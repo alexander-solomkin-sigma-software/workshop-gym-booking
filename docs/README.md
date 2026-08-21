@@ -31,6 +31,16 @@ That is why specs are written and reviewed **before** code is touched, and why d
 | `Releases/PlanDoc` | Release plans — scope cut, what ships, work-item list (planning only) | — |
 | `DeliveryReports` | Progress / delivery / status reports (git-derived) | — |
 
+## Seed data & the local database
+
+The app persists to a local SQLite database at `api/data/gym.sqlite`. That file
+is **git-ignored** and rebuilt from `api/src/seed.ts` (`npm run seed`, wired into
+`npm run setup`) — the **seed script is the source of truth**, not the binary DB.
+Committing the script rather than the `.sqlite` keeps every checkout on identical,
+deterministic data while avoiding Windows line-ending/checksum churn on a binary
+file. Rationale: [ADR-0001](Architectural/ADR/0001-sqlite-local-db-file.md);
+contents: [sample-seed-data](Implementation/DevData/sample-seed-data.md).
+
 ## Two tiers of docs (and the cycle between them)
 
 - **Tactical, point-in-time** artifacts (`Implementation/Plans`, dated design/analysis notes) capture a decision or a piece of work *at a moment*. They are consumed during development and not rewritten afterwards.
