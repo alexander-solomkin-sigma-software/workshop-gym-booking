@@ -1,0 +1,111 @@
+/* Minimal functional styling — visual design is intentionally out of scope. */
+:root {
+  font-family: system-ui, sans-serif;
+  color: #1a1a1a;
+  background: #fafafa;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.4rem;
+}
+
+nav button {
+  margin-right: 0.5rem;
+}
+
+nav button.active {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.member {
+  float: right;
+  font-size: 0.9rem;
+}
+
+.member input {
+  width: 6rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+  vertical-align: top;
+}
+
+.muted {
+  color: #777;
+  font-size: 0.85rem;
+}
+
+.tag.full {
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.4rem;
+  background: #fde2e2;
+  color: #a00;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+button {
+  cursor: pointer;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #a00;
+  background: #fde2e2;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.class-card {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  margin-top: 1rem;
+}
+
+form {
+  display: inline-flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0.5rem 0;
+}
+
+input {
+  padding: 0.3rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+
+.capacity-editor input {
+  width: 4rem;
+}
