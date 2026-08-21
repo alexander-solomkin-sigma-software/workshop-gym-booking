@@ -1,0 +1,20 @@
+{
+  "name": "gym-booking",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Gym Class Booking — a small, runnable app used as the baseline for an AI-assisted delivery workshop.",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "api",
+    "web"
+  ],
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "npm run dev --workspace api & npm run dev --workspace web",
+    "build": "npm run build --workspace api && npm run build --workspace web",
+    "test": "npm run test --workspaces --if-present",
+    "seed": "npm run seed --workspace api"
+  }
+}

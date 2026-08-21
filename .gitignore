@@ -1,0 +1,13 @@
+# --- Authoring artifacts (NOT part of the student template's history) ---
+/PLAN.md
+/_authoring/
+
+# --- Node / build ---
+node_modules/
+dist/
+build/
+coverage/
+*.log
+.env
+.env.local
+.DS_Store

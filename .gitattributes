@@ -1,0 +1,9 @@
+# Force LF on all text files so committed fixtures / seed checksums stay stable
+# across Windows/macOS/Linux checkouts (autocrlf must not rewrite line endings).
+* text=auto eol=lf
+
+# Treat these as binary (never touch line endings)
+*.png binary
+*.jpg binary
+*.sqlite binary
+*.db binary
