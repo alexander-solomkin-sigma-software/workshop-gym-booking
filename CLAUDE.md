@@ -23,11 +23,16 @@ docs/      # all project documentation (see docs/README.md)
 
 ## How we document
 
-`docs/` is organised by artifact type and follows the delivery workflow: **Requirements → Design (+ ADR) → Execution plan → Feature description → Dev testing scenarios**. Read `docs/README.md` for the taxonomy and where each artifact lives.
+The docs in `docs/` are **persistent memory**: you (an AI agent) lose context between sessions, so the specs carry the requirements, design rationale, and constraints forward. Write the spec before the code, and keep the living docs current — a stale doc misleads the next session.
+
+`docs/` is organised by artifact type and follows the delivery workflow: **Requirements → Design (+ ADR) → Execution plan → Feature description → Dev testing scenarios**. Read `docs/README.md` for the taxonomy, naming conventions, and the two-tier (tactical vs living) model.
 
 Key rules:
+- **One topic per document**; keep files small.
+- **Separation of concerns** — feature descriptions describe behaviour, not implementation.
 - **No blank templates** — start any new document by copying the closest existing filled one and adapting it.
-- **Living docs carry a Revision History** table; mark inline changes with `[Revised YYYY-MM-DD]`.
+- **Living docs carry a Revision History** table; mark inline changes with `[Revised YYYY-MM-DD]`; the body always reflects current state.
+- **When you write a design, check whether it holds a decision worth an ADR** — if so, add one in `docs/Architectural/ADR/`.
 - **Commit convention:** `type(scope): reason #<issue>`.
 
 ## Adding a feature (what you actually do here)

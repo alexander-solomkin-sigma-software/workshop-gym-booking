@@ -1,6 +1,12 @@
 # Documentation
 
-This repository keeps **all project documentation in the repo, next to the code** — Git is the single source of truth, and every doc renders directly on the default branch (Markdown + Mermaid). Documentation is organised by the kind of artifact it holds, following the delivery workflow:
+All project documentation lives **in the repo, next to the code** — Git is the single source of truth, and every doc renders directly on the default branch (Markdown + Mermaid).
+
+## Why the docs live here (persistent memory for AI)
+
+This project is built with an **AI-assisted delivery workflow**. An AI agent (and a human returning weeks later) loses context between sessions — it does not remember last week's decisions. **Structured documents act as persistent memory:** they carry the requirements, design rationale, and constraints across sessions, so when the agent reads a spec it understands not just *what* to build but *why* and *within what limits*. Without this, every session starts from zero and drifts.
+
+That is why specs are written and reviewed **before** code is touched, and why documentation is organised by artifact type following the delivery workflow:
 
 **Requirements → Design (+ ADR) → Execution plan → Feature description → Dev testing scenarios.**
 
@@ -13,7 +19,7 @@ This repository keeps **all project documentation in the repo, next to the code*
 | `Business/NFR` | Non-Functional Requirements — performance, simplicity, data, constraints | Requirements |
 | `FunctionalRequirement/Usecase` | Use cases — actor, preconditions, main/alternate flows, postconditions | Requirements |
 | `FunctionalRequirement/Feature` | Living feature descriptions — behaviour of a shipped feature | Feature description |
-| `Architectural/Design` | Design specs — problem, data model, API/UI surface, edge cases | Design |
+| `Architectural/Design` | Design specs + coding conventions — problem, data model, API/UI surface, edge cases | Design |
 | `Architectural/ADR` | Architecture Decision Records — one decision each (Context/Decision/Consequences) | Design |
 | `Testing/Strategy` | Test strategy — what we unit- vs end-to-end test, tools, coverage intent | Dev testing |
 | `Testing/TestCases` | Manual test checklists (TC-table, sign-off oriented) | Dev testing |
@@ -25,23 +31,44 @@ This repository keeps **all project documentation in the repo, next to the code*
 | `Releases/PlanDoc` | Release plans — scope cut, what ships, work-item list (planning only) | — |
 | `DeliveryReports` | Progress / delivery / status reports (git-derived) | — |
 
-## Two tiers of docs
+## Two tiers of docs (and the cycle between them)
 
-- **Tactical, point-in-time** artifacts (`Implementation/Plans`, dated design/analysis notes) capture a decision or a piece of work *at a moment*. They are not rewritten as the product evolves.
+- **Tactical, point-in-time** artifacts (`Implementation/Plans`, dated design/analysis notes) capture a decision or a piece of work *at a moment*. They are consumed during development and not rewritten afterwards.
 - **Living, current-state** artifacts (`FunctionalRequirement/Feature`, `Architectural/ADR`, `Architectural/Design`) describe *how things are now* and are kept up to date.
 
-## Conventions
+They feed each other in a loop: **a tactical plan drives a code change → the code change updates the living docs → the living docs inform the next plan.** Skip the loop and the living docs go stale, which then poisons the next round of specs.
 
-- **No blank templates.** To start a new artifact, **copy the closest existing filled document** and adapt it. The shipped baseline docs are your patterns.
-- **Revision History for evolving docs.** Living docs carry a short revision table at the top:
+## Key principles
 
-  | Date | Change | Rationale / source |
-  |---|---|---|
+- **Specs before code.** Requirements, design, and task breakdown happen first, where changes are cheapest; implementation follows an approved blueprint.
+- **Implementation updates the living docs.** After finishing work driven by a plan, update the affected feature descriptions / ADRs / design. This is not optional — stale docs mislead the next session.
+- **One topic per document.** Each file covers one feature, one decision, one question. Small files fit an AI context window and can be updated atomically.
+- **Separation of concerns.** Feature descriptions stay free of implementation detail (behaviour, not code); technical design lives in `Architectural/`. Keeps knowledge easy to navigate.
 
-  and mark inline updates with a `[Revised YYYY-MM-DD]` note rather than silently editing.
-- **One decision per ADR.** New records are numbered sequentially (`NNNN-short-title.md`) and listed in `Architectural/ADR/index.md`.
+## Naming conventions
+
+- **Feature descriptions:** one file per feature in `FunctionalRequirement/Feature/` (e.g. `booking.md`).
+- **ADRs:** numbered sequentially in `Architectural/ADR/` (`NNNN-short-title.md`), listed in `Architectural/ADR/index.md`.
+- **Execution plans / dated notes:** date-prefixed in `Implementation/Plans/` (`YYYY-MM-DD-topic.md`).
+- **Use cases:** `UC-NN-short-title.md`; **test scenarios:** `TF-NN-short-title.md`; **test checklists:** `<feature>-checklist.md`.
+- **No blank templates** — start a new artifact by **copying the closest existing filled document** and adapting it. The shipped baseline docs are your patterns.
 - **Commit convention:** `type(scope): reason #<issue>` (a GitHub issue number or work-item key).
+
+## Revision History for evolving docs
+
+Living docs carry a short revision table right after the title/date:
+
+```markdown
+**Date:** YYYY-MM-DD (baseline) | **Last revised:** YYYY-MM-DD
+
+## Revision History
+
+| Date | Change | Rationale / source |
+|---|---|---|
+```
+
+Mark inline changes with a `[Revised YYYY-MM-DD]` note. **The body always reflects current state** — do not leave stale text in place "for history"; rewrite the affected section and record the change in the table. Git captures exact diffs for archaeology; the table exists for human comprehension at a glance. Truly point-in-time artifacts (one-shot analyses, session notes) stay immutable and need no revision table.
 
 ## Adding a new feature
 
-When you extend this app with a new feature, you **add new files** for that increment into these same folders (a use case, a design + ADR, a plan, a feature description, test cases/scenarios). You do **not** rewrite the baseline docs — you add alongside them.
+When you extend this app, you **add new files** for that increment into these same folders (a use case, a design + ADR, a plan, a feature description, test cases/scenarios). You do **not** rewrite the baseline docs — you add alongside them. When you write a design, check whether it contains a decision worth capturing as an ADR.
