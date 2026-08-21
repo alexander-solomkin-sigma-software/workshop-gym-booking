@@ -11,3 +11,15 @@ coverage/
 .env
 .env.local
 .DS_Store
+
+# --- Generated (rebuilt by scripts/setup.mjs — the seed script is the source of truth) ---
+api/data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.db
+
+# --- Test / tooling output ---
+playwright-report/
+test-results/
+.playwright/
