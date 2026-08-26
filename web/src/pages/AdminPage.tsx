@@ -43,46 +43,63 @@ export function AdminPage() {
 
   return (
     <section>
-      <h2>Manage classes</h2>
-      {error && <p className="error" role="alert">{error}</p>}
+      <h2 className="text-lg font-semibold mb-3">Manage classes</h2>
+      {error && (
+        <div role="alert" className="alert alert-error mb-3">
+          {error}
+        </div>
+      )}
 
-      <form onSubmit={onCreateClass} className="new-class">
+      <form onSubmit={onCreateClass} className="flex flex-wrap items-end gap-2 mb-4">
         <input
           aria-label="class name"
+          className="input input-bordered input-sm"
           placeholder="Class name"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <input
           aria-label="class description"
+          className="input input-bordered input-sm flex-1 min-w-40"
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <button type="submit">Add class</button>
+        <button type="submit" className="btn btn-sm btn-primary">
+          Add class
+        </button>
       </form>
 
-      {classes.map((c) => (
-        <div key={c.id} className="class-card">
-          <h3>{c.name}</h3>
-          <p className="muted">{c.description}</p>
-          <ScheduleForm classId={c.id} onDone={refresh} onError={setError} />
-          <ul>
-            {c.sessions.map((s) => (
-              <li key={s.id}>
-                {new Date(s.startsAt).toLocaleString()} — capacity {s.capacity} (booked {s.booked}){' '}
-                <CapacityEditor
-                  sessionId={s.id}
-                  current={s.capacity}
-                  onDone={refresh}
-                  onError={setError}
-                />
-              </li>
-            ))}
-            {c.sessions.length === 0 && <li className="muted">No sessions yet.</li>}
-          </ul>
-        </div>
-      ))}
+      <div className="space-y-4">
+        {classes.map((c) => (
+          <div key={c.id} className="card bg-base-100 shadow">
+            <div className="card-body p-4 gap-2">
+              <h3 className="card-title text-base">{c.name}</h3>
+              <p className="text-sm opacity-60">{c.description}</p>
+              <ScheduleForm classId={c.id} onDone={refresh} onError={setError} />
+              <ul className="mt-1 space-y-1">
+                {c.sessions.map((s) => (
+                  <li key={s.id} className="flex flex-wrap items-center gap-2 text-sm">
+                    <span>
+                      {new Date(s.startsAt).toLocaleString()} — capacity {s.capacity} (booked{' '}
+                      {s.booked})
+                    </span>
+                    <CapacityEditor
+                      sessionId={s.id}
+                      current={s.capacity}
+                      onDone={refresh}
+                      onError={setError}
+                    />
+                  </li>
+                ))}
+                {c.sessions.length === 0 && (
+                  <li className="text-sm opacity-60">No sessions yet.</li>
+                )}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
@@ -112,9 +129,10 @@ function ScheduleForm({
   }
 
   return (
-    <form onSubmit={submit} className="schedule">
+    <form onSubmit={submit} className="flex flex-wrap items-end gap-2">
       <input
         type="datetime-local"
+        className="input input-bordered input-sm"
         aria-label={`schedule session for class ${classId}`}
         value={startsAt}
         onChange={(e) => setStartsAt(e.target.value)}
@@ -123,11 +141,14 @@ function ScheduleForm({
       <input
         type="number"
         min={1}
+        className="input input-bordered input-sm w-24"
         aria-label={`capacity for new session of class ${classId}`}
         value={capacity}
         onChange={(e) => setCapacity(e.target.value)}
       />
-      <button type="submit">Schedule</button>
+      <button type="submit" className="btn btn-sm">
+        Schedule
+      </button>
     </form>
   );
 }
@@ -155,15 +176,18 @@ function CapacityEditor({
   }
 
   return (
-    <span className="capacity-editor">
+    <span className="join">
       <input
         type="number"
         min={1}
+        className="join-item input input-bordered input-xs w-20"
         aria-label={`set capacity for session ${sessionId}`}
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
-      <button onClick={save}>Set</button>
+      <button className="join-item btn btn-xs" onClick={save}>
+        Set
+      </button>
     </span>
   );
 }

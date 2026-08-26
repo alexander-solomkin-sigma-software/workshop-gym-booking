@@ -59,52 +59,58 @@ export function TimetablePage({ memberId }: { memberId: string }) {
 
   return (
     <section>
-      <h2>Timetable</h2>
-      {error && <p className="error" role="alert">{error}</p>}
-      <table>
-        <thead>
-          <tr>
-            <th>Class</th>
-            <th>When</th>
-            <th>Spots left</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {entries.map((e) => (
-            <tr key={e.sessionId} data-session={e.sessionId}>
-              <td>
-                <strong>{e.className}</strong>
-                <div className="muted">{e.description}</div>
-              </td>
-              <td>{formatWhen(e.startsAt)}</td>
-              <td>
-                {e.spotsLeft} / {e.capacity}
-                {e.isFull && <span className="tag full">Full</span>}
-              </td>
-              <td>
-                {e.myBookingId !== null ? (
-                  <button
-                    className="cancel"
-                    disabled={busy !== null}
-                    onClick={() => onCancel(e.myBookingId!)}
-                  >
-                    Cancel
-                  </button>
-                ) : (
-                  <button
-                    className="book"
-                    disabled={busy !== null || e.isFull}
-                    onClick={() => onBook(e.sessionId)}
-                  >
-                    Book
-                  </button>
-                )}
-              </td>
+      <h2 className="text-lg font-semibold mb-3">Timetable</h2>
+      {error && (
+        <div role="alert" className="alert alert-error mb-3">
+          {error}
+        </div>
+      )}
+      <div className="overflow-x-auto rounded-box border border-base-300">
+        <table className="table table-zebra">
+          <thead>
+            <tr>
+              <th>Class</th>
+              <th>When</th>
+              <th>Spots left</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {entries.map((e) => (
+              <tr key={e.sessionId} data-session={e.sessionId}>
+                <td>
+                  <div className="font-medium">{e.className}</div>
+                  <div className="text-sm opacity-60">{e.description}</div>
+                </td>
+                <td className="whitespace-nowrap">{formatWhen(e.startsAt)}</td>
+                <td>
+                  {e.spotsLeft} / {e.capacity}
+                  {e.isFull && <span className="badge badge-error badge-sm ml-2">Full</span>}
+                </td>
+                <td>
+                  {e.myBookingId !== null ? (
+                    <button
+                      className="btn btn-sm btn-outline"
+                      disabled={busy !== null}
+                      onClick={() => onCancel(e.myBookingId!)}
+                    >
+                      Cancel
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-sm btn-primary"
+                      disabled={busy !== null || e.isFull}
+                      onClick={() => onBook(e.sessionId)}
+                    >
+                      Book
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }
