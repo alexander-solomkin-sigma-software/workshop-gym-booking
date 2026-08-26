@@ -47,12 +47,14 @@ export function editClass(db: Db, id: number, name: string, description = ''): C
 /**
  * Schedule a session for a class.
  * @throws NotFoundError    class does not exist
- * @throws ValidationError  capacity is not a positive integer, or startsAt is blank
+ * @throws ValidationError  capacity is not a positive integer, startsAt/endsAt is blank,
+ *                          or endsAt is not strictly after startsAt
  */
 export function scheduleSession(
   db: Db,
   classId: number,
   startsAt: string,
+  endsAt: string,
   capacity: number,
 ): SessionRow {
   if (!classes.getClass(db, classId)) {
@@ -61,10 +63,16 @@ export function scheduleSession(
   if (!startsAt) {
     throw new ValidationError('startsAt is required');
   }
+  if (!endsAt) {
+    throw new ValidationError('endsAt is required');
+  }
+  if (Date.parse(endsAt) <= Date.parse(startsAt)) {
+    throw new ValidationError('endsAt must be after startsAt');
+  }
   if (!Number.isInteger(capacity) || capacity <= 0) {
     throw new ValidationError('capacity must be a positive integer');
   }
-  return sessions.insertSession(db, classId, startsAt, capacity);
+  return sessions.insertSession(db, classId, startsAt, endsAt, capacity);
 }
 
 /**

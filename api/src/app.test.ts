@@ -60,4 +60,60 @@ describe('API (HTTP surface)', () => {
     const bad = await request(app).post('/api/admin/classes').send({ name: '' });
     expect(bad.status).toBe(400);
   });
+
+  it('GET /api/timetable includes each session endsAt', async () => {
+    const res = await request(app).get('/api/timetable').query({ memberId: 'm1' });
+    expect(res.status).toBe(200);
+    expect(res.body.every((e: { endsAt?: string }) => typeof e.endsAt === 'string')).toBe(true);
+  });
+
+  it('admin can schedule a session with a finish time (201) and it reaches the timetable', async () => {
+    const created = await request(app)
+      .post('/api/admin/classes')
+      .send({ name: 'Barre', description: '' });
+    const classId = created.body.id;
+
+    const ok = await request(app).post('/api/admin/sessions').send({
+      classId,
+      startsAt: '2026-09-10T10:00:00.000Z',
+      endsAt: '2026-09-10T11:00:00.000Z',
+      capacity: 10,
+    });
+    expect(ok.status).toBe(201);
+    expect(ok.body.endsAt).toBe('2026-09-10T11:00:00.000Z');
+
+    const timetable = await request(app).get('/api/timetable').query({ memberId: 'zoe' });
+    const entry = timetable.body.find(
+      (e: { sessionId: number }) => e.sessionId === ok.body.id,
+    );
+    expect(entry.startsAt).toBe('2026-09-10T10:00:00.000Z');
+    expect(entry.endsAt).toBe('2026-09-10T11:00:00.000Z');
+  });
+
+  it('rejects scheduling when the finish is not after the start (400)', async () => {
+    const created = await request(app)
+      .post('/api/admin/classes')
+      .send({ name: 'Barre', description: '' });
+    const classId = created.body.id;
+
+    const notAfter = await request(app).post('/api/admin/sessions').send({
+      classId,
+      startsAt: '2026-09-10T10:00:00.000Z',
+      endsAt: '2026-09-10T09:30:00.000Z',
+      capacity: 10,
+    });
+    expect(notAfter.status).toBe(400);
+
+    const missing = await request(app).post('/api/admin/sessions').send({
+      classId,
+      startsAt: '2026-09-10T10:00:00.000Z',
+      capacity: 10,
+    });
+    expect(missing.status).toBe(400);
+
+    // Nothing was scheduled for the new class.
+    const classes = await request(app).get('/api/admin/classes');
+    const barre = classes.body.find((c: { id: number }) => c.id === classId);
+    expect(barre.sessions).toHaveLength(0);
+  });
 });

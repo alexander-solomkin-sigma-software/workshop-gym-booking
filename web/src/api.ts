@@ -50,12 +50,13 @@ export function createClass(name: string, description: string): Promise<unknown>
 export function scheduleSession(
   classId: number,
   startsAt: string,
+  endsAt: string,
   capacity: number,
 ): Promise<unknown> {
   return fetch('/api/admin/sessions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ classId, startsAt, capacity }),
+    body: JSON.stringify({ classId, startsAt, endsAt, capacity }),
   }).then(json);
 }
 

@@ -12,6 +12,18 @@ function formatWhen(iso: string): string {
   });
 }
 
+function formatTime(iso: string): string {
+  return new Date(iso).toLocaleTimeString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+/** A session's start–finish range, e.g. "Tue Sep 1, 08:00–09:00". */
+function formatRange(startsAt: string, endsAt: string): string {
+  return `${formatWhen(startsAt)}–${formatTime(endsAt)}`;
+}
+
 /** Member timetable: browse sessions, book a free spot, cancel own booking. */
 export function TimetablePage({ memberId }: { memberId: string }) {
   const [entries, setEntries] = useState<TimetableEntry[]>([]);
@@ -82,7 +94,7 @@ export function TimetablePage({ memberId }: { memberId: string }) {
                   <div className="font-medium">{e.className}</div>
                   <div className="text-sm opacity-60">{e.description}</div>
                 </td>
-                <td className="whitespace-nowrap">{formatWhen(e.startsAt)}</td>
+                <td className="whitespace-nowrap">{formatRange(e.startsAt, e.endsAt)}</td>
                 <td>
                   {e.spotsLeft} / {e.capacity}
                   {e.isFull && <span className="badge badge-error badge-sm ml-2">Full</span>}

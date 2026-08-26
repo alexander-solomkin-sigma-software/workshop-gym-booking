@@ -40,12 +40,22 @@ export function adminRoutes(db: Db): Router {
     }
   });
 
-  // POST /api/admin/sessions  { classId, startsAt, capacity }
+  // POST /api/admin/sessions  { classId, startsAt, endsAt, capacity }
   router.post('/admin/sessions', (req, res, next) => {
     try {
-      const { classId, startsAt, capacity } = req.body ?? {};
+      const { classId, startsAt, endsAt, capacity } = req.body ?? {};
       if (!Number.isInteger(classId)) throw new ValidationError('classId (integer) required');
-      res.status(201).json(scheduleSession(db, classId, String(startsAt ?? ''), Number(capacity)));
+      res
+        .status(201)
+        .json(
+          scheduleSession(
+            db,
+            classId,
+            String(startsAt ?? ''),
+            String(endsAt ?? ''),
+            Number(capacity),
+          ),
+        );
     } catch (err) {
       next(err);
     }

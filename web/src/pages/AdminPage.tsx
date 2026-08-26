@@ -81,7 +81,8 @@ export function AdminPage() {
                 {c.sessions.map((s) => (
                   <li key={s.id} className="flex flex-wrap items-center gap-2 text-sm">
                     <span>
-                      {new Date(s.startsAt).toLocaleString()} — capacity {s.capacity} (booked{' '}
+                      {new Date(s.startsAt).toLocaleString()}–
+                      {new Date(s.endsAt).toLocaleTimeString()} — capacity {s.capacity} (booked{' '}
                       {s.booked})
                     </span>
                     <CapacityEditor
@@ -114,14 +115,17 @@ function ScheduleForm({
   onError: (m: string) => void;
 }) {
   const [startsAt, setStartsAt] = useState('');
+  const [endsAt, setEndsAt] = useState('');
   const [capacity, setCapacity] = useState('10');
 
   async function submit(ev: React.FormEvent) {
     ev.preventDefault();
     try {
-      const iso = new Date(startsAt).toISOString();
-      await scheduleSession(classId, iso, Number(capacity));
+      const startIso = new Date(startsAt).toISOString();
+      const endIso = new Date(endsAt).toISOString();
+      await scheduleSession(classId, startIso, endIso, Number(capacity));
       setStartsAt('');
+      setEndsAt('');
       await onDone();
     } catch (e) {
       onError((e as Error).message);
@@ -136,6 +140,14 @@ function ScheduleForm({
         aria-label={`schedule session for class ${classId}`}
         value={startsAt}
         onChange={(e) => setStartsAt(e.target.value)}
+        required
+      />
+      <input
+        type="datetime-local"
+        className="input input-bordered input-sm"
+        aria-label={`finish time for class ${classId}`}
+        value={endsAt}
+        onChange={(e) => setEndsAt(e.target.value)}
         required
       />
       <input

@@ -13,36 +13,42 @@ import Database from 'better-sqlite3';
 interface SeedClass {
   name: string;
   description: string;
-  sessions: Array<{ startsAt: string; capacity: number }>;
+  sessions: Array<{ startsAt: string; endsAt: string; capacity: number }>;
 }
 
 // Fixed datetimes (not relative to "now") so the seed is byte-stable.
+// Each session runs for 60 minutes (endsAt = startsAt + 1h).
 const SEED: SeedClass[] = [
   {
     name: 'Yoga Flow',
     description: 'All-levels vinyasa to start the day.',
     sessions: [
-      { startsAt: '2026-09-01T08:00:00.000Z', capacity: 12 },
-      { startsAt: '2026-09-03T08:00:00.000Z', capacity: 12 },
+      { startsAt: '2026-09-01T08:00:00.000Z', endsAt: '2026-09-01T09:00:00.000Z', capacity: 12 },
+      { startsAt: '2026-09-03T08:00:00.000Z', endsAt: '2026-09-03T09:00:00.000Z', capacity: 12 },
     ],
   },
   {
     name: 'Spin',
     description: 'High-energy indoor cycling.',
     sessions: [
-      { startsAt: '2026-09-01T18:00:00.000Z', capacity: 3 }, // small — used to demo "full"
-      { startsAt: '2026-09-02T18:00:00.000Z', capacity: 10 },
+      // small — used to demo "full"
+      { startsAt: '2026-09-01T18:00:00.000Z', endsAt: '2026-09-01T19:00:00.000Z', capacity: 3 },
+      { startsAt: '2026-09-02T18:00:00.000Z', endsAt: '2026-09-02T19:00:00.000Z', capacity: 10 },
     ],
   },
   {
     name: 'HIIT',
     description: 'Twenty minutes of high-intensity intervals.',
-    sessions: [{ startsAt: '2026-09-02T07:00:00.000Z', capacity: 8 }],
+    sessions: [
+      { startsAt: '2026-09-02T07:00:00.000Z', endsAt: '2026-09-02T08:00:00.000Z', capacity: 8 },
+    ],
   },
   {
     name: 'Pilates',
     description: 'Core strength and mobility.',
-    sessions: [{ startsAt: '2026-09-04T09:00:00.000Z', capacity: 10 }],
+    sessions: [
+      { startsAt: '2026-09-04T09:00:00.000Z', endsAt: '2026-09-04T10:00:00.000Z', capacity: 10 },
+    ],
   },
 ];
 
@@ -52,7 +58,7 @@ export function seed(db: Db): void {
 
   const insertClass = db.prepare('INSERT INTO classes (name, description) VALUES (?, ?)');
   const insertSession = db.prepare(
-    'INSERT INTO sessions (class_id, starts_at, capacity) VALUES (?, ?, ?)',
+    'INSERT INTO sessions (class_id, starts_at, ends_at, capacity) VALUES (?, ?, ?, ?)',
   );
   const insertBooking = db.prepare(
     'INSERT INTO bookings (session_id, member_id, created_at) VALUES (?, ?, ?)',
@@ -63,7 +69,9 @@ export function seed(db: Db): void {
     for (const c of SEED) {
       const classId = Number(insertClass.run(c.name, c.description).lastInsertRowid);
       for (const s of c.sessions) {
-        sessionIds.push(Number(insertSession.run(classId, s.startsAt, s.capacity).lastInsertRowid));
+        sessionIds.push(
+          Number(insertSession.run(classId, s.startsAt, s.endsAt, s.capacity).lastInsertRowid),
+        );
       }
     }
     // Seed a booking for the demo member on the first Yoga session.

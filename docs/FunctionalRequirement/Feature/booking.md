@@ -10,13 +10,15 @@
 | Date | Change | Rationale / source |
 |---|---|---|
 | 2026-08-21 | Baseline behaviour documented | Implements UC-01 (F2/F3) |
+| 2026-08-26 | Timetable shows each session's start–finish time | Sessions gained a finish time (UC-02 A4 / PDR F4) |
 
 ## Overview
 
 A **member** reserves a place in a class **session** from the timetable, and can
 **cancel** their own reservation to free the place again. The timetable shows,
-per session, how many spots remain and whether the member already holds a place.
-This describes *behaviour*; the technical shape lives in the design.
+per session, its **start–finish** time, how many spots remain, and whether the
+member already holds a place. This describes *behaviour*; the technical shape
+lives in the design.
 
 Covers PDR **F2 (Book a class)** and **F3 (Cancel a booking)**; admin management
 (F4) is described in the admin flow and design.

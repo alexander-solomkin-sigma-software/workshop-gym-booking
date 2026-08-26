@@ -10,6 +10,7 @@ export interface SessionRow {
   id: number;
   classId: number;
   startsAt: string;
+  endsAt: string;
   capacity: number;
 }
 
@@ -27,6 +28,7 @@ export interface TimetableEntry {
   className: string;
   description: string;
   startsAt: string;
+  endsAt: string;
   capacity: number;
   booked: number;
   spotsLeft: number;

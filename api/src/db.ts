@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS sessions (
   id        INTEGER PRIMARY KEY AUTOINCREMENT,
   class_id  INTEGER NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
   starts_at TEXT NOT NULL,
+  ends_at   TEXT NOT NULL CHECK (ends_at > starts_at),
   capacity  INTEGER NOT NULL CHECK (capacity > 0)
 );
 

@@ -51,7 +51,7 @@ export function timetableForMember(db: Db, memberId: string): TimetableEntry[] {
   const rows = db
     .prepare(
       `SELECT s.id AS sessionId, c.id AS classId, c.name AS className, c.description AS description,
-              s.starts_at AS startsAt, s.capacity AS capacity,
+              s.starts_at AS startsAt, s.ends_at AS endsAt, s.capacity AS capacity,
               (SELECT COUNT(*) FROM bookings b WHERE b.session_id = s.id) AS booked,
               (SELECT b2.id FROM bookings b2 WHERE b2.session_id = s.id AND b2.member_id = ?) AS myBookingId
        FROM sessions s
@@ -64,6 +64,7 @@ export function timetableForMember(db: Db, memberId: string): TimetableEntry[] {
     className: string;
     description: string;
     startsAt: string;
+    endsAt: string;
     capacity: number;
     booked: number;
     myBookingId: number | null;

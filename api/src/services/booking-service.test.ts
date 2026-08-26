@@ -10,7 +10,13 @@ let sessionId: number;
 beforeEach(() => {
   db = openMemoryDb();
   const cls = createClass(db, 'Yoga', 'Morning flow');
-  sessionId = scheduleSession(db, cls.id, '2026-09-01T08:00:00.000Z', 2).id;
+  sessionId = scheduleSession(
+    db,
+    cls.id,
+    '2026-09-01T08:00:00.000Z',
+    '2026-09-01T09:00:00.000Z',
+    2,
+  ).id;
 });
 
 function statusOf(fn: () => unknown): number | undefined {
