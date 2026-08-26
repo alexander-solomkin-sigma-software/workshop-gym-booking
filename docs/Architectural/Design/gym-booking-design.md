@@ -119,6 +119,11 @@ straight from the ISO strings it is given. A real product would resolve these in
 the venue's local timezone; here we deliberately do not, so behaviour is simple
 and deterministic to test. This is stated explicitly so tests pin it down.
 
+_Implemented: `scheduleSession` in `api/src/services/class-service.ts` enforces
+all four rules using the `OPEN_TIME` / `CLOSE_TIME` / `MIN_DURATION_MIN` /
+`MAX_DURATION_MIN` constants defined there; the Admin schedule form
+(`web/src/pages/AdminPage.tsx`) captures a date + start time + finish time._
+
 _No ADR is warranted: this is a set of input-validation rules plus a form change,
 built on the existing schema and service pattern — not a new architectural
 decision or trade-off. (The earlier `ends_at` field addition likewise needed none.)_

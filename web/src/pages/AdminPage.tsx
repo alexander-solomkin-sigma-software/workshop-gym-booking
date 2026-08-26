@@ -114,18 +114,23 @@ function ScheduleForm({
   onDone: () => Promise<void>;
   onError: (m: string) => void;
 }) {
-  const [startsAt, setStartsAt] = useState('');
-  const [endsAt, setEndsAt] = useState('');
+  const [date, setDate] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [finishTime, setFinishTime] = useState('');
   const [capacity, setCapacity] = useState('10');
 
   async function submit(ev: React.FormEvent) {
     ev.preventDefault();
     try {
-      const startIso = new Date(startsAt).toISOString();
-      const endIso = new Date(endsAt).toISOString();
+      // Compose start/finish ISO timestamps from the shared date + each time.
+      // Sharing one date picker makes a session structurally single-day; the
+      // server still re-validates all scheduling rules.
+      const startIso = new Date(`${date}T${startTime}`).toISOString();
+      const endIso = new Date(`${date}T${finishTime}`).toISOString();
       await scheduleSession(classId, startIso, endIso, Number(capacity));
-      setStartsAt('');
-      setEndsAt('');
+      setDate('');
+      setStartTime('');
+      setFinishTime('');
       await onDone();
     } catch (e) {
       onError((e as Error).message);
@@ -135,19 +140,27 @@ function ScheduleForm({
   return (
     <form onSubmit={submit} className="flex flex-wrap items-end gap-2">
       <input
-        type="datetime-local"
+        type="date"
         className="input input-bordered input-sm"
-        aria-label={`schedule session for class ${classId}`}
-        value={startsAt}
-        onChange={(e) => setStartsAt(e.target.value)}
+        aria-label={`session date for class ${classId}`}
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
         required
       />
       <input
-        type="datetime-local"
+        type="time"
+        className="input input-bordered input-sm"
+        aria-label={`start time for class ${classId}`}
+        value={startTime}
+        onChange={(e) => setStartTime(e.target.value)}
+        required
+      />
+      <input
+        type="time"
         className="input input-bordered input-sm"
         aria-label={`finish time for class ${classId}`}
-        value={endsAt}
-        onChange={(e) => setEndsAt(e.target.value)}
+        value={finishTime}
+        onChange={(e) => setFinishTime(e.target.value)}
         required
       />
       <input

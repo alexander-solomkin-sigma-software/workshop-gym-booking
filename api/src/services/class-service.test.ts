@@ -109,6 +109,80 @@ describe('class-service (admin)', () => {
     expect(updated.capacity).toBe(5);
   });
 
+  describe('single-day scheduling rules', () => {
+    it('accepts a valid single-day session within working hours (30 min–3 h)', () => {
+      const cls = createClass(db, 'Spin', '');
+      expect(() =>
+        scheduleSession(db, cls.id, '2026-09-10T10:00:00.000Z', '2026-09-10T11:00:00.000Z', 10),
+      ).not.toThrow();
+    });
+
+    it('rejects a session spanning two calendar days (400)', () => {
+      const cls = createClass(db, 'Spin', '');
+      expect(
+        statusOf(() =>
+          scheduleSession(db, cls.id, '2026-09-10T21:00:00.000Z', '2026-09-11T08:00:00.000Z', 10),
+        ),
+      ).toBe(400);
+      expect(listClassesWithSessions(db)[0].sessions).toHaveLength(0);
+    });
+
+    it('rejects a start before opening time (400)', () => {
+      const cls = createClass(db, 'Spin', '');
+      expect(
+        statusOf(() =>
+          scheduleSession(db, cls.id, '2026-09-10T05:30:00.000Z', '2026-09-10T06:30:00.000Z', 10),
+        ),
+      ).toBe(400);
+    });
+
+    it('rejects a finish after closing time (400)', () => {
+      const cls = createClass(db, 'Spin', '');
+      expect(
+        statusOf(() =>
+          scheduleSession(db, cls.id, '2026-09-10T21:30:00.000Z', '2026-09-10T22:30:00.000Z', 10),
+        ),
+      ).toBe(400);
+    });
+
+    it('rejects a session shorter than the minimum duration (400)', () => {
+      const cls = createClass(db, 'Spin', '');
+      // 20 min < 30 min.
+      expect(
+        statusOf(() =>
+          scheduleSession(db, cls.id, '2026-09-10T10:00:00.000Z', '2026-09-10T10:20:00.000Z', 10),
+        ),
+      ).toBe(400);
+    });
+
+    it('rejects a session longer than the maximum duration (400)', () => {
+      const cls = createClass(db, 'Spin', '');
+      // 4 h > 3 h.
+      expect(
+        statusOf(() =>
+          scheduleSession(db, cls.id, '2026-09-10T10:00:00.000Z', '2026-09-10T14:00:00.000Z', 10),
+        ),
+      ).toBe(400);
+    });
+
+    it('accepts inclusive boundaries: 06:00 open edge, 22:00 close edge, 30 min, and 3 h', () => {
+      const cls = createClass(db, 'Spin', '');
+      // 30 min at the open edge.
+      expect(() =>
+        scheduleSession(db, cls.id, '2026-09-10T06:00:00.000Z', '2026-09-10T06:30:00.000Z', 10),
+      ).not.toThrow();
+      // 30 min ending at the close edge.
+      expect(() =>
+        scheduleSession(db, cls.id, '2026-09-10T21:30:00.000Z', '2026-09-10T22:00:00.000Z', 10),
+      ).not.toThrow();
+      // Exactly 3 h.
+      expect(() =>
+        scheduleSession(db, cls.id, '2026-09-10T09:00:00.000Z', '2026-09-10T12:00:00.000Z', 10),
+      ).not.toThrow();
+      expect(listClassesWithSessions(db)[0].sessions).toHaveLength(3);
+    });
+  });
+
   it('refuses to drop capacity below current bookings (409)', () => {
     const cls = createClass(db, 'Spin', '');
     const session = scheduleSession(
