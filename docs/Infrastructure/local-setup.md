@@ -4,7 +4,7 @@ Everything needed to get **Gym Class Booking** running on your machine and to ru
 
 ## Prerequisites
 
-- **Node.js ≥ 20** and npm (the version is pinned in `.nvmrc`; with `nvm` run `nvm use`).
+- **Node.js ≥ 22 LTS** and npm (pinned in `.nvmrc`; with `nvm` run `nvm use`). Use a consistent Node **major** — the app uses a native module (`better-sqlite3`) whose binary is tied to the Node major version.
 - **Git**.
 - That's it. The database is a local SQLite file created by the seed step — nothing to install or configure.
 
@@ -84,5 +84,12 @@ npm test --workspace api        # Vitest only
   ```
 
   If you can't install it (offline / restricted network), skip the e2e and run `npm test --workspace api` — the Vitest suite alone is enough to verify the app's behaviour.
+- **`NODE_MODULE_VERSION` mismatch** (e.g. seed crashes with *"better_sqlite3.node was compiled against a different Node.js version … NODE_MODULE_VERSION 137 … requires 127"*): the native `better-sqlite3` binary was built for a **different Node version** than the one you're running (this happens if `node_modules` was installed under another Node). Fix:
+
+  ```bash
+  npm rebuild better-sqlite3      # rebuild for your current Node
+  ```
+
+  `npm run setup` now does this automatically. If it persists, delete `node_modules` and re-run `npm run setup` under the Node version you'll use (`node -v`; the repo pins one in `.nvmrc`).
 - **Windows line endings:** the repo forces LF via `.gitattributes`; if your editor rewrites files to CRLF, re-check your Git `core.autocrlf` setting so the seed/data checksums stay stable.
 - **Nothing loads at 5173:** confirm both servers started (`npm run dev` shows the API "listening on http://localhost:3001" line); the web app needs the API running for data.

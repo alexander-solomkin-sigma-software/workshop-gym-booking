@@ -8,7 +8,7 @@
 
 The app needs relational persistence for classes, sessions, and bookings, with
 a `UNIQUE (session_id, member_id)` constraint and simple counting queries. It is
-a learning baseline that must (per NFR): run locally on Node ≥ 20 with **no
+a learning baseline that must (per NFR): run locally on Node ≥ 22 LTS with **no
 external services, database server, or containers**, come up with **one command
 in under 5 minutes**, and start every checkout from **identical, deterministic
 data** across Windows/macOS/Linux.

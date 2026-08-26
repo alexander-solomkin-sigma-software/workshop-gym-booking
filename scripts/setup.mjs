@@ -25,13 +25,24 @@ function step(label) {
 }
 
 const major = Number(process.versions.node.split('.')[0]);
-if (major < 20) {
-  console.error(`Node 20+ is required (found ${process.versions.node}). See .nvmrc.`);
+if (major < 22) {
+  console.error(`Node 22+ is required (found ${process.versions.node}). See .nvmrc.`);
   process.exit(1);
 }
 
 step('Installing dependencies (workspaces: api, web)');
 run('npm install');
+
+// better-sqlite3 is a native addon: its compiled binary is tied to a specific
+// Node ABI. If node_modules was installed under a different Node version, npm
+// install won't rebuild it ("up to date") and the app crashes with
+// NODE_MODULE_VERSION mismatch. Rebuild it against THIS Node to self-heal.
+step(`Rebuilding native modules for Node ${process.versions.node}`);
+try {
+  run('npm rebuild better-sqlite3');
+} catch {
+  console.warn('better-sqlite3 rebuild failed — if seeding fails with a NODE_MODULE_VERSION error, run `npm rebuild better-sqlite3`.');
+}
 
 step('Seeding the local database');
 run('npm run seed');

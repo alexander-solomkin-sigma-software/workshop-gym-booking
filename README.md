@@ -19,7 +19,7 @@ npm run dev     # start API + web
 npm test        # run the full test suite
 ```
 
-Requires Node ≥ 20 (see `.nvmrc`).
+Requires Node ≥ 22 LTS (pinned in `.nvmrc`; with `nvm` run `nvm use`).
 
 ## Documentation
 

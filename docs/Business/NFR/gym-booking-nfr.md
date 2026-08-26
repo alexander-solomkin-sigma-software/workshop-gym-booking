@@ -12,7 +12,7 @@ Kept intentionally light — this is a small, local, single-instance app used as
 
 | Area | Requirement |
 |---|---|
-| **Runtime** | Runs locally on Node ≥ 20; no external services, database server, or containers. |
+| **Runtime** | Runs locally on Node ≥ 22 LTS (consistent major — native `better-sqlite3`); no external services, database server, or containers. |
 | **Persistence** | A local SQLite DB file, seeded deterministically so every checkout starts from the same data. |
 | **Setup** | One command (`npm run setup`) brings it up in under 5 minutes. |
 | **Performance** | Instant for the seeded data volume (tens of classes/sessions); no performance tuning required. |
