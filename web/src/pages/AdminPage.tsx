@@ -51,20 +51,30 @@ export function AdminPage() {
       )}
 
       <form onSubmit={onCreateClass} className="flex flex-wrap items-end gap-2 mb-4">
-        <input
-          aria-label="class name"
-          className="input input-bordered input-sm"
-          placeholder="Class name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          aria-label="class description"
-          className="input input-bordered input-sm flex-1 min-w-40"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        <label className="form-control">
+          <div className="label py-1">
+            <span className="label-text">Class name</span>
+          </div>
+          <input
+            aria-label="class name"
+            className="input input-bordered input-sm"
+            placeholder="Class name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </label>
+        <label className="form-control flex-1 min-w-40">
+          <div className="label py-1">
+            <span className="label-text">Description</span>
+          </div>
+          <input
+            aria-label="class description"
+            className="input input-bordered input-sm w-full"
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </label>
         <button type="submit" className="btn btn-sm btn-primary">
           Add class
         </button>
@@ -139,38 +149,58 @@ function ScheduleForm({
 
   return (
     <form onSubmit={submit} className="flex flex-wrap items-end gap-2">
-      <input
-        type="date"
-        className="input input-bordered input-sm"
-        aria-label={`session date for class ${classId}`}
-        value={date}
-        onChange={(e) => setDate(e.target.value)}
-        required
-      />
-      <input
-        type="time"
-        className="input input-bordered input-sm"
-        aria-label={`start time for class ${classId}`}
-        value={startTime}
-        onChange={(e) => setStartTime(e.target.value)}
-        required
-      />
-      <input
-        type="time"
-        className="input input-bordered input-sm"
-        aria-label={`finish time for class ${classId}`}
-        value={finishTime}
-        onChange={(e) => setFinishTime(e.target.value)}
-        required
-      />
-      <input
-        type="number"
-        min={1}
-        className="input input-bordered input-sm w-24"
-        aria-label={`capacity for new session of class ${classId}`}
-        value={capacity}
-        onChange={(e) => setCapacity(e.target.value)}
-      />
+      <label className="form-control">
+        <div className="label py-1">
+          <span className="label-text">Date</span>
+        </div>
+        <input
+          type="date"
+          className="input input-bordered input-sm"
+          aria-label={`session date for class ${classId}`}
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          required
+        />
+      </label>
+      <label className="form-control">
+        <div className="label py-1">
+          <span className="label-text">Start time</span>
+        </div>
+        <input
+          type="time"
+          className="input input-bordered input-sm"
+          aria-label={`start time for class ${classId}`}
+          value={startTime}
+          onChange={(e) => setStartTime(e.target.value)}
+          required
+        />
+      </label>
+      <label className="form-control">
+        <div className="label py-1">
+          <span className="label-text">Finish time</span>
+        </div>
+        <input
+          type="time"
+          className="input input-bordered input-sm"
+          aria-label={`finish time for class ${classId}`}
+          value={finishTime}
+          onChange={(e) => setFinishTime(e.target.value)}
+          required
+        />
+      </label>
+      <label className="form-control">
+        <div className="label py-1">
+          <span className="label-text">Capacity</span>
+        </div>
+        <input
+          type="number"
+          min={1}
+          className="input input-bordered input-sm w-24"
+          aria-label={`capacity for new session of class ${classId}`}
+          value={capacity}
+          onChange={(e) => setCapacity(e.target.value)}
+        />
+      </label>
       <button type="submit" className="btn btn-sm">
         Schedule
       </button>
@@ -201,18 +231,21 @@ function CapacityEditor({
   }
 
   return (
-    <span className="join">
-      <input
-        type="number"
-        min={1}
-        className="join-item input input-bordered input-xs w-20"
-        aria-label={`set capacity for session ${sessionId}`}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-      <button className="join-item btn btn-xs" onClick={save}>
-        Set
-      </button>
+    <span className="inline-flex items-center gap-1">
+      <span className="text-xs opacity-60">Capacity</span>
+      <span className="join">
+        <input
+          type="number"
+          min={1}
+          className="join-item input input-bordered input-xs w-20"
+          aria-label={`set capacity for session ${sessionId}`}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <button className="join-item btn btn-xs" onClick={save}>
+          Set
+        </button>
+      </span>
     </span>
   );
 }

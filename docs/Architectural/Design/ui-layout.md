@@ -7,6 +7,7 @@
 | Date | Change | Rationale / source |
 |---|---|---|
 | 2026-08-26 | Baseline layout design: left sidebar nav, distinct base surfaces, relabelled member field, labelled Manage-classes inputs | UX clarity pass on the shipped UI; builds on [ui-styling.md](ui-styling.md) / [ADR-0002](../ADR/0002-ui-styling-tailwind-daisyui.md) |
+| 2026-08-26 | Implemented in the web app (`App.tsx`, `AdminPage.tsx`); nav e2e added. | This design realised as-specified |
 
 ## Problem
 
