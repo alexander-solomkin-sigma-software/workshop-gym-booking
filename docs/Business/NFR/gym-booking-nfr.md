@@ -1,11 +1,12 @@
 # Non-Functional Requirements — Gym Class Booking
 
-**Date:** 2026-08-21 (baseline) | **Last revised:** 2026-08-21
+**Date:** 2026-08-21 (baseline) | **Last revised:** 2026-08-26
 
 ## Revision History
 
 | Date | Change | Rationale / source |
 |---|---|---|
+| 2026-08-26 | Added **UI styling** requirement: minimize custom CSS, use an out-of-the-box Tailwind (daisyUI) theme | [ui-styling design](../../Architectural/Design/ui-styling.md) |
 | 2026-08-21 | Baseline approved | Initial baseline NFRs |
 
 Kept intentionally light — this is a small, local, single-instance app used as a learning baseline.
@@ -20,4 +21,5 @@ Kept intentionally light — this is a small, local, single-instance app used as
 | **Correctness** | Business rules (capacity, double-booking, cancellation) enforced in the API, covered by tests. |
 | **Security** | No auth hardening; a simple member/admin distinction only. Not for production or real personal data. |
 | **Portability** | Works on Windows, macOS, and Linux (LF line endings enforced). |
-| **Accessibility / design** | Minimal, functional UI; visual/brand design and a11y polish are out of scope. |
+| **UI styling** `[Revised 2026-08-26]` | **Minimize custom CSS.** Use **Tailwind CSS + daisyUI** with an out-of-the-box theme; hand-written CSS only where the theme/utilities cannot express a need. See [ui-styling design](../../Architectural/Design/ui-styling.md). |
+| **Accessibility / design** | Functional UI from a prebuilt theme; bespoke brand/visual design and deep a11y work remain out of scope. |
