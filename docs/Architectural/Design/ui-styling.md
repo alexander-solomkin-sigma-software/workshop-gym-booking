@@ -1,6 +1,6 @@
 # UI Styling — Tailwind + out-of-the-box theme
 
-**Status:** Proposed — theme selection pending.
+**Status:** Accepted — theme selected (**business**, dark). Decision recorded in [ADR-0002](../ADR/0002-ui-styling-tailwind-daisyui.md).
 
 ## Problem
 
@@ -55,5 +55,7 @@ exercise.)
 
 ## Chosen theme
 
-**TBD — pending selection.** Once chosen, this section records the decision and an ADR
-(`Architectural/ADR/0002-…`) captures it; implementation follows.
+**business** (daisyUI dark theme) — selected 2026-08-26. Dark, high-contrast, sleek; set via
+`data-theme="business"` on `<html>` and `daisyui.themes: ['business']` in `web/tailwind.config.js`.
+Decision: [ADR-0002](../ADR/0002-ui-styling-tailwind-daisyui.md). Implemented: `styles.css` reduced
+to the Tailwind directives; `App`, `TimetablePage`, `AdminPage` restyled with daisyUI classes.

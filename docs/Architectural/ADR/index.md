@@ -37,3 +37,4 @@ add it here and append a row to the index.
 | ADR | Title | Status | Date |
 |-----|-------|--------|------|
 | [0001](0001-sqlite-local-db-file.md) | SQLite as a seeded local DB file | Accepted | 2026-08-21 |
+| [0002](0002-ui-styling-tailwind-daisyui.md) | UI styling via Tailwind + daisyUI (business theme) | Accepted | 2026-08-26 |
