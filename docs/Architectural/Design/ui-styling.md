@@ -59,3 +59,8 @@ exercise.)
 `data-theme="business"` on `<html>` and `daisyui.themes: ['business']` in `web/tailwind.config.js`.
 Decision: [ADR-0002](../ADR/0002-ui-styling-tailwind-daisyui.md). Implemented: `styles.css` reduced
 to the Tailwind directives; `App`, `TimetablePage`, `AdminPage` restyled with daisyUI classes.
+
+**[Revised 2026-08-26]** A UX/layout clarity pass (left sidebar navigation, distinct base
+surfaces for contrast, relabelled member field, and visibly labelled Manage-classes inputs)
+is captured in [ui-layout.md](ui-layout.md). It stays within this styling decision — daisyUI
+surfaces/tokens/component classes only, no custom colour CSS — so no new ADR is warranted.
