@@ -31,7 +31,7 @@ This starts both workspaces:
 | **Web** (Vite + React) | http://localhost:5173 | Open this in your browser. |
 | **API** (Express) | http://localhost:3001 | The web app calls it via the `/api` prefix, proxied by Vite in dev. |
 
-Open **http://localhost:5173** — you'll land on the timetable (member view) with a tab to the admin view.
+Open **http://localhost:5173** — you'll land on the timetable (member view), with a left sidebar to switch to the admin view.
 
 You can also run the parts individually:
 

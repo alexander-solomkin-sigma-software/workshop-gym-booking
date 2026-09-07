@@ -14,8 +14,8 @@ free the place again — the end-to-end happy path exercised by the Playwright s
 
 ## Steps
 
-1. Open the web app; the **Timetable** tab is shown.
-2. Set the **member id** field to `zoe`.
+1. Open the web app; the **Timetable** view is shown (selected in the left sidebar).
+2. Set the **member id** field (labelled "Acting as", in the sidebar) to `zoe`.
 3. In the first session row, click **Book**.
 4. Observe the row's action and spot count.
 5. Click **Cancel** in the same row.

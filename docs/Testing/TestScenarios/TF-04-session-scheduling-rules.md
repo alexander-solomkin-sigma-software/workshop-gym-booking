@@ -17,11 +17,11 @@ they are entered.
 ## Preconditions
 
 - App running via `npm run dev` with the seeded database.
-- On the **Admin** ("Manage classes") tab, with at least one class (e.g. `Yoga Flow`).
+- On the **Admin** ("Manage classes") view (left sidebar), with at least one class (e.g. `Yoga Flow`).
 
 ## Steps
 
-1. Open the Admin tab; pick an existing class. Note the schedule form now has a
+1. Open the Admin view (left sidebar); pick an existing class. Note the schedule form now has a
    **date** field, a **start time** field, and a **finish time** field.
 2. **Accept — valid session:** date Sep 10, start 10:00, finish 11:00 (1 h,
    in hours, same day), a capacity → Schedule.

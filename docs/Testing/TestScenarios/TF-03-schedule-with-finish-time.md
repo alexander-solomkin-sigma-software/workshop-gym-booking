@@ -11,13 +11,13 @@ message and nothing is saved.
 ## Preconditions
 
 - App running via `npm run dev` with the seeded database.
-- On the **Admin** ("Manage classes") tab, with at least one class (e.g. `Yoga Flow`).
+- On the **Admin** ("Manage classes") view (left sidebar), with at least one class (e.g. `Yoga Flow`).
 
 ## Steps
 
-1. Open the Admin tab; pick an existing class.
-2. In its schedule form, enter a **start time** (e.g. Sep 10, 10:00), a
-   **finish time** after it (e.g. Sep 10, 11:00), and a capacity, then Schedule.
+1. Open the Admin view (left sidebar); pick an existing class.
+2. In its schedule form, enter a **date** (e.g. Sep 10), a **start time** (e.g. 10:00),
+   a **finish time** after it (e.g. 11:00), and a capacity, then Schedule.
 3. Observe the class's session list.
 4. Schedule again for the same class, this time with a **finish time equal to or
    before the start** (e.g. start Sep 10, 10:00 / finish Sep 10, 09:30), then Schedule.

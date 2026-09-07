@@ -130,7 +130,8 @@ decision or trade-off. (The earlier `ends_at` field addition likewise needed non
 
 ## Web routes
 
-A single-page app with two tabs (no router needed at this size):
+A single-page app with two views selected from a **left sidebar menu** (no router
+needed at this size; navigation and layout detail in [ui-layout.md](ui-layout.md)):
 
 - **Timetable** — lists sessions with their **start–finish** time (e.g.
   `Tue Sep 1, 08:00–09:00`); a Book button on free sessions, Cancel on the
@@ -145,8 +146,8 @@ A single-page app with two tabs (no router needed at this size):
   `date + finishTime` and posts them unchanged. The server still re-validates all
   rules — the UI holds no business logic.
 
-A `member id` field stands in for auth so the flows can be demonstrated as
-different members. The UI holds **no business logic** — it renders API results
+A `member id` field (labelled "Acting as", in the sidebar) stands in for auth so
+the flows can be demonstrated as different members. The UI holds **no business logic** — it renders API results
 and surfaces API error messages.
 
 ## Edge cases
