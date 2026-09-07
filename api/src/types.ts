@@ -12,6 +12,25 @@ export interface SessionRow {
   startsAt: string;
   endsAt: string;
   capacity: number;
+  /** Optional trainer id; `null` when no trainer is assigned. */
+  trainer: string | null;
+}
+
+/**
+ * A trainer-view entry: one session assigned to a trainer, enriched with its
+ * class name and a roster derived from current bookings.
+ */
+export interface TrainerSessionEntry {
+  sessionId: number;
+  classId: number;
+  className: string;
+  startsAt: string;
+  endsAt: string;
+  trainer: string;
+  /** Member ids booked on this session (derived from `bookings`). */
+  roster: string[];
+  /** Roster length. */
+  booked: number;
 }
 
 export interface BookingRow {

@@ -97,6 +97,7 @@ export function scheduleSession(
   startsAt: string,
   endsAt: string,
   capacity: number,
+  trainer?: string | null,
 ): SessionRow {
   if (!classes.getClass(db, classId)) {
     throw new NotFoundError(`class ${classId} not found`);
@@ -136,7 +137,10 @@ export function scheduleSession(
   if (!Number.isInteger(capacity) || capacity <= 0) {
     throw new ValidationError('capacity must be a positive integer');
   }
-  return sessions.insertSession(db, classId, startsAt, endsAt, capacity);
+  // Optional trainer id — metadata only, not a scheduling constraint. A blank
+  // or omitted value stores NULL (no trainer assigned).
+  const cleanTrainer = (trainer ?? '').trim() || null;
+  return sessions.insertSession(db, classId, startsAt, endsAt, capacity, cleanTrainer);
 }
 
 /**

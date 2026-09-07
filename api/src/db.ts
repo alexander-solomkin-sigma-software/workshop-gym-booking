@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS sessions (
   class_id  INTEGER NOT NULL REFERENCES classes(id) ON DELETE CASCADE,
   starts_at TEXT NOT NULL,
   ends_at   TEXT NOT NULL CHECK (ends_at > starts_at),
-  capacity  INTEGER NOT NULL CHECK (capacity > 0)
+  capacity  INTEGER NOT NULL CHECK (capacity > 0),
+  trainer   TEXT
 );
 
 CREATE TABLE IF NOT EXISTS bookings (

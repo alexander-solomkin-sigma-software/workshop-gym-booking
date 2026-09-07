@@ -183,6 +183,73 @@ describe('class-service (admin)', () => {
     });
   });
 
+  describe('optional trainer on a session', () => {
+    it('stores an optional trainer when provided', () => {
+      const cls = createClass(db, 'Yoga', '');
+      const session = scheduleSession(
+        db,
+        cls.id,
+        '2026-09-10T10:00:00.000Z',
+        '2026-09-10T11:00:00.000Z',
+        10,
+        't-morgan',
+      );
+      expect(session.trainer).toBe('t-morgan');
+    });
+
+    it('stores NULL when no trainer is provided or it is blank', () => {
+      const cls = createClass(db, 'Yoga', '');
+      const noTrainer = scheduleSession(
+        db,
+        cls.id,
+        '2026-09-10T10:00:00.000Z',
+        '2026-09-10T11:00:00.000Z',
+        10,
+      );
+      expect(noTrainer.trainer).toBeNull();
+      const blank = scheduleSession(
+        db,
+        cls.id,
+        '2026-09-11T10:00:00.000Z',
+        '2026-09-11T11:00:00.000Z',
+        10,
+        '   ',
+      );
+      expect(blank.trainer).toBeNull();
+    });
+
+    it('still enforces all scheduling rules when a trainer is supplied', () => {
+      const cls = createClass(db, 'Yoga', '');
+      // Spanning two days — invalid regardless of the trainer.
+      expect(
+        statusOf(() =>
+          scheduleSession(
+            db,
+            cls.id,
+            '2026-09-10T21:00:00.000Z',
+            '2026-09-11T08:00:00.000Z',
+            10,
+            't-morgan',
+          ),
+        ),
+      ).toBe(400);
+      // Duration too long — invalid regardless of the trainer.
+      expect(
+        statusOf(() =>
+          scheduleSession(
+            db,
+            cls.id,
+            '2026-09-10T10:00:00.000Z',
+            '2026-09-10T14:00:00.000Z',
+            10,
+            't-morgan',
+          ),
+        ),
+      ).toBe(400);
+      expect(listClassesWithSessions(db)[0].sessions).toHaveLength(0);
+    });
+  });
+
   it('refuses to drop capacity below current bookings (409)', () => {
     const cls = createClass(db, 'Spin', '');
     const session = scheduleSession(

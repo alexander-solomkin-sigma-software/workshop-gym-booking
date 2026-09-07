@@ -13,7 +13,7 @@ import Database from 'better-sqlite3';
 interface SeedClass {
   name: string;
   description: string;
-  sessions: Array<{ startsAt: string; endsAt: string; capacity: number }>;
+  sessions: Array<{ startsAt: string; endsAt: string; capacity: number; trainer?: string }>;
 }
 
 // Fixed datetimes (not relative to "now") so the seed is byte-stable.
@@ -23,16 +23,34 @@ const SEED: SeedClass[] = [
     name: 'Yoga Flow',
     description: 'All-levels vinyasa to start the day.',
     sessions: [
-      { startsAt: '2026-09-01T08:00:00.000Z', endsAt: '2026-09-01T09:00:00.000Z', capacity: 12 },
-      { startsAt: '2026-09-03T08:00:00.000Z', endsAt: '2026-09-03T09:00:00.000Z', capacity: 12 },
+      // Assigned to t-morgan and pre-booked by m1 → a non-empty roster.
+      {
+        startsAt: '2026-09-01T08:00:00.000Z',
+        endsAt: '2026-09-01T09:00:00.000Z',
+        capacity: 12,
+        trainer: 't-morgan',
+      },
+      // Assigned to t-morgan with no bookings → an empty roster (UC-03 A3).
+      {
+        startsAt: '2026-09-03T08:00:00.000Z',
+        endsAt: '2026-09-03T09:00:00.000Z',
+        capacity: 12,
+        trainer: 't-morgan',
+      },
     ],
   },
   {
     name: 'Spin',
     description: 'High-energy indoor cycling.',
     sessions: [
-      // small — used to demo "full"
-      { startsAt: '2026-09-01T18:00:00.000Z', endsAt: '2026-09-01T19:00:00.000Z', capacity: 3 },
+      // small — used to demo "full"; assigned to t-lee with a full roster.
+      {
+        startsAt: '2026-09-01T18:00:00.000Z',
+        endsAt: '2026-09-01T19:00:00.000Z',
+        capacity: 3,
+        trainer: 't-lee',
+      },
+      // No trainer assigned → appears in no trainer's list.
       { startsAt: '2026-09-02T18:00:00.000Z', endsAt: '2026-09-02T19:00:00.000Z', capacity: 10 },
     ],
   },
@@ -58,7 +76,7 @@ export function seed(db: Db): void {
 
   const insertClass = db.prepare('INSERT INTO classes (name, description) VALUES (?, ?)');
   const insertSession = db.prepare(
-    'INSERT INTO sessions (class_id, starts_at, ends_at, capacity) VALUES (?, ?, ?, ?)',
+    'INSERT INTO sessions (class_id, starts_at, ends_at, capacity, trainer) VALUES (?, ?, ?, ?, ?)',
   );
   const insertBooking = db.prepare(
     'INSERT INTO bookings (session_id, member_id, created_at) VALUES (?, ?, ?)',
@@ -70,7 +88,10 @@ export function seed(db: Db): void {
       const classId = Number(insertClass.run(c.name, c.description).lastInsertRowid);
       for (const s of c.sessions) {
         sessionIds.push(
-          Number(insertSession.run(classId, s.startsAt, s.endsAt, s.capacity).lastInsertRowid),
+          Number(
+            insertSession.run(classId, s.startsAt, s.endsAt, s.capacity, s.trainer ?? null)
+              .lastInsertRowid,
+          ),
         );
       }
     }

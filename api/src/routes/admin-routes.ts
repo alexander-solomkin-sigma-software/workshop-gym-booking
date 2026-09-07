@@ -43,7 +43,7 @@ export function adminRoutes(db: Db): Router {
   // POST /api/admin/sessions  { classId, startsAt, endsAt, capacity }
   router.post('/admin/sessions', (req, res, next) => {
     try {
-      const { classId, startsAt, endsAt, capacity } = req.body ?? {};
+      const { classId, startsAt, endsAt, capacity, trainer } = req.body ?? {};
       if (!Number.isInteger(classId)) throw new ValidationError('classId (integer) required');
       res
         .status(201)
@@ -54,6 +54,7 @@ export function adminRoutes(db: Db): Router {
             String(startsAt ?? ''),
             String(endsAt ?? ''),
             Number(capacity),
+            trainer == null ? null : String(trainer),
           ),
         );
     } catch (err) {

@@ -10,6 +10,16 @@ export function countBookings(db: Db, sessionId: number): number {
   return row.n;
 }
 
+/** Member ids booked on a session, ordered by booking time (the roster). */
+export function listRoster(db: Db, sessionId: number): string[] {
+  const rows = db
+    .prepare(
+      'SELECT member_id AS memberId FROM bookings WHERE session_id = ? ORDER BY created_at, id',
+    )
+    .all(sessionId) as Array<{ memberId: string }>;
+  return rows.map((r) => r.memberId);
+}
+
 export function findBooking(
   db: Db,
   sessionId: number,

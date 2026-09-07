@@ -5,6 +5,7 @@ import { AppError } from './errors.js';
 import { timetableRoutes } from './routes/timetable-routes.js';
 import { bookingRoutes } from './routes/booking-routes.js';
 import { adminRoutes } from './routes/admin-routes.js';
+import { trainerRoutes } from './routes/trainer-routes.js';
 
 /** Translate domain errors into HTTP responses; hide unexpected errors as 500. */
 const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
@@ -27,6 +28,7 @@ export function createApp(db: Db): Express {
   app.use('/api', timetableRoutes(db));
   app.use('/api', bookingRoutes(db));
   app.use('/api', adminRoutes(db));
+  app.use('/api', trainerRoutes(db));
 
   app.use(errorHandler);
   return app;
