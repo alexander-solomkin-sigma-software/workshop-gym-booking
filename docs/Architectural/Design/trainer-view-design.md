@@ -7,6 +7,7 @@
 | Date | Change | Rationale / source |
 |---|---|---|
 | 2026-08-26 | Baseline design for the Trainer view increment | Derived from the extra-feature backlog (Trainer view) + UC-03 |
+| 2026-08-26 | Implemented as designed (#5) — `sessions.trainer` column, `GET /api/trainer/:trainerId/sessions`, Trainer sidebar view + acting-as field, optional Admin trainer field | See [feature description](../../FunctionalRequirement/Feature/trainer-view.md) |
 
 ## Problem
 
