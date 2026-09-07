@@ -17,7 +17,7 @@ docs/      # all project documentation (see docs/README.md)
 
 ## Run it
 
-- `npm run setup` — install, build, and seed the local DB (one command, < 5 min).
+- `npm run setup` — install, seed the local DB (and rebuild the native module) (one command, < 5 min).
 - `npm run dev` — start API + web for local development.
 - `npm test` — run the full test suite (Vitest unit/API + a Playwright smoke). Keep it green.
 

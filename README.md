@@ -14,7 +14,7 @@ It is deliberately simple and self-contained, and serves as the baseline for pra
 ## Quick start
 
 ```bash
-npm run setup   # install, build, seed the local DB (one command)
+npm run setup   # install, seed the local DB (and rebuild the native module) (one command)
 npm run dev     # start API + web
 npm test        # run the full test suite
 ```

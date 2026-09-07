@@ -19,7 +19,7 @@ Use **Tailwind CSS** with the **daisyUI** plugin and ship the built-in
 **`business`** (dark) theme.
 
 - `styles.css` is reduced to the three Tailwind directives; components use daisyUI
-  semantic classes (`navbar`, `tabs`, `table`, `card`, `btn`, `badge`, `alert`,
+  semantic classes (`menu`, `table`, `card`, `btn`, `badge`, `alert`,
   `input`, `join`) plus a few Tailwind utilities for layout.
 - The theme is selected in `web/tailwind.config.js` (`daisyui.themes: ['business']`)
   and applied via `data-theme="business"` on `<html>`. Switching themes later is a

@@ -46,7 +46,7 @@ capacity, or scheduling rules.
   `TrainerSessionEntry` DTO (`sessionId`, `classId`, `className`, `startsAt`,
   `endsAt`, `trainer`, `roster: string[]`, `booked`).
 - [ ] Update `api/src/seed.ts` to assign a trainer to **some** sessions (e.g.
-  `t-morgan` on the two Yoga sessions, `t-alex` on a Spin session) and leave
+  `t-morgan` on the two Yoga sessions, `t-lee` on a Spin session) and leave
   others `NULL`; keep datetimes byte-stable.
 - [ ] **Commit (gated):** folded into the service slice (Task 2).
 

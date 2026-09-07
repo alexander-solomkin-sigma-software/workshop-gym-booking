@@ -1,6 +1,6 @@
 # UC-03 — View assigned sessions and rosters (Trainer)
 
-**Covers:** F5 Trainer view (see [trainer-view-design.md](../../Architectural/Design/trainer-view-design.md))
+**Covers:** Trainer view — extra-feature backlog (first item) (see [extra-feature-backlog.md](../extra-feature-backlog.md) and [trainer-view-design.md](../../Architectural/Design/trainer-view-design.md))
 
 ## Actor
 Trainer.
@@ -27,7 +27,7 @@ Trainer.
 - The trainer sees exactly the sessions assigned to their id, each with an accurate roster and count consistent with current bookings.
 
 ## Rules referenced
-- A session may have at most one trainer; the assignment is optional (see design, PDR F5).
+- A session may have at most one trainer; the assignment is optional (see design; extra-feature backlog: Trainer view).
 - Rosters are **derived** from current bookings — the member ids booked on the session (see design; mirrors the derived `spotsLeft`).
 - Existing scheduling rules (single-day, working hours 06:00–22:00, duration 30 min–3 h) are unchanged by this feature (see UC-02).
 - No real authentication: a trainer id stands in for sign-in, exactly like the member field (see [ADR-0003](../../Architectural/ADR/0003-trainer-role-minimal-auth.md)).

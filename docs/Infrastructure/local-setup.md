@@ -93,3 +93,4 @@ npm test --workspace api        # Vitest only
   `npm run setup` now does this automatically. If it persists, delete `node_modules` and re-run `npm run setup` under the Node version you'll use (`node -v`; the repo pins one in `.nvmrc`).
 - **Windows line endings:** the repo forces LF via `.gitattributes`; if your editor rewrites files to CRLF, re-check your Git `core.autocrlf` setting so the seed/data checksums stay stable.
 - **Nothing loads at 5173:** confirm both servers started (`npm run dev` shows the API "listening on http://localhost:3001" line); the web app needs the API running for data.
+- **Session times off by your timezone offset:** session times are entered in local time but validated as-is against the resulting UTC timestamps (the documented timezone simplification), so in a non-UTC zone the 06:00–22:00 working-hours window and the same-day boundary shift by your offset. Enter times as if they were UTC, or expect the shift.

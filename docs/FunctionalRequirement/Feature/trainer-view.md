@@ -10,7 +10,7 @@
 
 | Date | Change | Rationale / source |
 |---|---|---|
-| 2026-08-26 | Trainer view shipped: assigned sessions + rosters | Implements UC-03 (PDR F5) |
+| 2026-08-26 | Trainer view shipped: assigned sessions + rosters | Implements UC-03 (extra-feature backlog: Trainer view) |
 
 ## Overview
 
@@ -21,7 +21,8 @@ trainer opens the **Trainer** view and reads their assigned sessions, each with
 its **roster** (the booked member ids) and **count**. This describes *behaviour*;
 the technical shape lives in the design.
 
-Covers PDR **F5 (Trainer view)** / UC-03. Read-only — it changes no bookings,
+Covers **UC-03** and the [extra-feature backlog](../extra-feature-backlog.md)
+(Trainer view, the first backlog item). Read-only — it changes no bookings,
 sessions, or classes.
 
 ## Behaviour
