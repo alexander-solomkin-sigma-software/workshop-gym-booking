@@ -1,4 +1,4 @@
-import type { ClassWithSessions, TimetableEntry } from './types.js';
+import type { ClassWithSessions, TimetableEntry, TrainerSessionEntry } from './types.js';
 
 /**
  * Thin API client. All business rules live server-side; this module only
@@ -15,6 +15,12 @@ async function json<T>(res: Response): Promise<T> {
 
 export function getTimetable(memberId: string): Promise<TimetableEntry[]> {
   return fetch(`/api/timetable?memberId=${encodeURIComponent(memberId)}`).then(json<TimetableEntry[]>);
+}
+
+export function getTrainerSessions(trainerId: string): Promise<TrainerSessionEntry[]> {
+  return fetch(`/api/trainer/${encodeURIComponent(trainerId)}/sessions`).then(
+    json<TrainerSessionEntry[]>,
+  );
 }
 
 export function book(sessionId: number, memberId: string): Promise<unknown> {
@@ -52,11 +58,12 @@ export function scheduleSession(
   startsAt: string,
   endsAt: string,
   capacity: number,
+  trainer?: string,
 ): Promise<unknown> {
   return fetch('/api/admin/sessions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ classId, startsAt, endsAt, capacity }),
+    body: JSON.stringify({ classId, startsAt, endsAt, capacity, trainer: trainer ?? null }),
   }).then(json);
 }
 

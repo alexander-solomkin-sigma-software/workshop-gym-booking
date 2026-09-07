@@ -29,3 +29,15 @@ export interface ClassWithSessions {
   description: string;
   sessions: SessionRow[];
 }
+
+/** A trainer-view entry: an assigned session with its derived roster. */
+export interface TrainerSessionEntry {
+  sessionId: number;
+  classId: number;
+  className: string;
+  startsAt: string;
+  endsAt: string;
+  trainer: string;
+  roster: string[];
+  booked: number;
+}

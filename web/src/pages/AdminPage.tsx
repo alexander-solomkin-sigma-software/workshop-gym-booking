@@ -128,6 +128,7 @@ function ScheduleForm({
   const [startTime, setStartTime] = useState('');
   const [finishTime, setFinishTime] = useState('');
   const [capacity, setCapacity] = useState('10');
+  const [trainer, setTrainer] = useState('');
 
   async function submit(ev: React.FormEvent) {
     ev.preventDefault();
@@ -137,10 +138,11 @@ function ScheduleForm({
       // server still re-validates all scheduling rules.
       const startIso = new Date(`${date}T${startTime}`).toISOString();
       const endIso = new Date(`${date}T${finishTime}`).toISOString();
-      await scheduleSession(classId, startIso, endIso, Number(capacity));
+      await scheduleSession(classId, startIso, endIso, Number(capacity), trainer.trim() || undefined);
       setDate('');
       setStartTime('');
       setFinishTime('');
+      setTrainer('');
       await onDone();
     } catch (e) {
       onError((e as Error).message);
@@ -199,6 +201,19 @@ function ScheduleForm({
           aria-label={`capacity for new session of class ${classId}`}
           value={capacity}
           onChange={(e) => setCapacity(e.target.value)}
+        />
+      </label>
+      <label className="form-control">
+        <div className="label py-1">
+          <span className="label-text">Trainer (optional)</span>
+        </div>
+        <input
+          type="text"
+          className="input input-bordered input-sm w-32"
+          aria-label={`trainer for new session of class ${classId}`}
+          placeholder="e.g. t-morgan"
+          value={trainer}
+          onChange={(e) => setTrainer(e.target.value)}
         />
       </label>
       <button type="submit" className="btn btn-sm">
