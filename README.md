@@ -23,7 +23,7 @@ Requires Node ≥ 22 LTS (pinned in `.nvmrc`; with `nvm` run `nvm use`).
 
 ## Documentation
 
-All project docs live in [`docs/`](docs) — organised by artifact type (requirements, design, ADRs, plans, feature descriptions, test cases/scenarios). Start with [`docs/README.md`](docs/README.md).
+Project docs live in [`docs/`](docs) — organised by artifact type (use cases, design, ADRs, plans, feature descriptions, test cases/scenarios). Start with [`docs/README.md`](docs/README.md). The business requirements (BRD, PDR, NFR) live in Confluence; see [`docs/Business/README.md`](docs/Business/README.md).
 
 ## Extending it
 

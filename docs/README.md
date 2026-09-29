@@ -1,6 +1,6 @@
 # Documentation
 
-All project documentation lives **in the repo, next to the code** — Git is the single source of truth, and every doc renders directly on the default branch (Markdown + Mermaid).
+Project documentation lives **in the repo, next to the code** — Git is the source of truth, and every doc renders directly on the default branch (Markdown + Mermaid). The one exception is the **Business layer** (BRD, PDR, NFR), which lives in **Confluence**; see [`Business/README.md`](Business/README.md) for the page links. The repo docs cite those pages by name.
 
 ## Why the docs live here (persistent memory for AI)
 
@@ -14,9 +14,9 @@ That is why specs are written and reviewed **before** code is touched, and why d
 
 | Folder | Holds | Produced at step |
 |---|---|---|
-| `Business/BRD` | Business Requirements Document — the "why", users, goals, scope | Requirements |
-| `Business/PDR` | Product Definition Requirements — the baseline feature list | Requirements |
-| `Business/NFR` | Non-Functional Requirements — performance, simplicity, data, constraints | Requirements |
+| Confluence: [BRD](https://vs5-ssw.atlassian.net/wiki/spaces/~5a858650a0fcf74179510e1d/pages/1736705) | Business Requirements Document — the "why", users, goals, scope | Requirements |
+| Confluence: [PDR](https://vs5-ssw.atlassian.net/wiki/spaces/~5a858650a0fcf74179510e1d/pages/1769473) | Product Definition Requirements — the baseline feature list | Requirements |
+| Confluence: [NFR](https://vs5-ssw.atlassian.net/wiki/spaces/~5a858650a0fcf74179510e1d/pages/1540098) | Non-Functional Requirements — performance, simplicity, data, constraints | Requirements |
 | `FunctionalRequirement/Usecase` | Use cases — actor, preconditions, main/alternate flows, postconditions | Requirements |
 | `FunctionalRequirement/Feature` | Living feature descriptions — behaviour of a shipped feature | Feature description |
 | `Architectural/Design` | Design specs + coding conventions — problem, data model, API/UI surface, edge cases | Design |

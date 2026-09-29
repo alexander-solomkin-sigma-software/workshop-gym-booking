@@ -1,7 +1,7 @@
 # Execution Plan — Baseline app (member + admin) — 2026-08-21
 
 **This is the HOW.** The *why* and scope live in the requirements
-(`Business/BRD`, `PDR`, `NFR`) and the [design](../../Architectural/Design/gym-booking-design.md).
+(BRD, PDR, NFR, now in Confluence; see [`Business/README.md`](../../Business/README.md)) and the [design](../../Architectural/Design/gym-booking-design.md).
 This is the ordered, test-first build plan for the baseline app.
 
 ## Goal
