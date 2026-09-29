@@ -130,8 +130,11 @@ decision or trade-off. (The earlier `ends_at` field addition likewise needed non
 
 ## Web routes
 
-A single-page app with two views selected from a **left sidebar menu** (no router
-needed at this size; navigation and layout detail in [ui-layout.md](ui-layout.md)):
+A single-page app with three views selected from a **left sidebar menu** (no router
+needed at this size; navigation and layout detail in [ui-layout.md](ui-layout.md)).
+_[Revised 2026-09-22] The menu lists only the pages the acting user's role may
+use — see [acting-as-roles.md](acting-as-roles.md); the third view is the
+read-only **Trainer** page._
 
 - **Timetable** — lists sessions with their **start–finish** time (e.g.
   `Tue Sep 1, 08:00–09:00`); a Book button on free sessions, Cancel on the
@@ -145,10 +148,15 @@ needed at this size; navigation and layout detail in [ui-layout.md](ui-layout.md
   composes `startsAt`/`endsAt` ISO timestamps from `date + startTime` and
   `date + finishTime` and posts them unchanged. The server still re-validates all
   rules — the UI holds no business logic.
+  [Revised 2026-09-22] The optional **trainer** is a dropdown of the known
+  trainers, and each listed session shows the trainer assigned to it.
 
-A `member id` field (labelled "Acting as", in the sidebar) stands in for auth so
-the flows can be demonstrated as different members. The UI holds **no business logic** — it renders API results
-and surfaces API error messages.
+An **"Acting as" dropdown** of hardcoded demo users (in the sidebar) stands in for
+auth, so the flows can be demonstrated as different members, trainers, and admins;
+the acting user's role also decides which menu items appear. The UI holds **no
+business logic** — it renders API results and surfaces API error messages, and the
+role gate hides pages without protecting them (see
+[acting-as-roles.md](acting-as-roles.md)). _[Revised 2026-09-22]_
 
 ## Edge cases
 

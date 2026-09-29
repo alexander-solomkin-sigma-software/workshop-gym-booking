@@ -62,3 +62,22 @@ existing **acting-as** pattern.
 - **Clear upgrade path** — if real auth is later needed, `sessions.trainer` can
   become a foreign key to a `trainers`/`users` table and the acting-as field can
   be replaced by an authenticated session, without changing the read model's shape.
+
+## Update 2026-09-22 — the acting-as field is now a picker
+
+The **decision above stands**: a trainer is still an id string, there is still no
+`trainers` table, no accounts, and no authentication. Only the *input* changed —
+see [acting-as-roles.md](../Design/acting-as-roles.md).
+
+- The two free-text fields (`member id`, `trainer id`) are replaced by **one
+  "Acting as" dropdown** over a hardcoded list of demo users, each carrying a
+  role. The accessible name is now `acting as`.
+- The sidebar shows **only the pages the acting role may use**, and an admin
+  opening the Trainer view picks whose roster to read.
+- Consequently an unknown or blank trainer id is no longer reachable from the UI.
+  The API is unchanged and still answers `200 []` for one.
+
+**"No security boundary" still holds, and matters more now that the UI implies
+one.** Hiding a menu item is presentation; `/api/admin/*` remains unguarded and
+accepts any id from any caller. The role gate is a demonstration of roles, not an
+enforcement of them.

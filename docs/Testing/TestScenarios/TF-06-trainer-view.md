@@ -4,24 +4,28 @@
 
 ## Goal
 
-Confirm a trainer, acting as their trainer id, sees exactly the sessions assigned
-to them — each with the correct roster (booked member ids) and count — and that an
-unknown trainer id shows an empty state. Read-only: no data is changed.
+Confirm a trainer, selected in the "Acting as" dropdown, sees exactly the sessions
+assigned to them — each with the correct roster (booked member ids) and count —
+and that an admin can read any trainer's roster. Read-only: no data is changed.
+
+_[Revised 2026-09-22] The trainer is chosen from a dropdown rather than typed; the
+former "unknown trainer id" step is no longer reachable from the UI — see
+[acting-as-roles.md](../../Architectural/Design/acting-as-roles.md)._
 
 ## Preconditions
 
 - App running via `npm run dev` with the seeded database.
-- The seed assigns a trainer (e.g. `t-morgan`) to some sessions and leaves others
-  unassigned; at least one of the trainer's sessions has bookings and (ideally) one
-  has none.
+- The seed assigns a trainer (e.g. `t-morgan` / **Morgan Diaz**) to some sessions
+  and leaves others unassigned; at least one of the trainer's sessions has bookings
+  and (ideally) one has none.
 
 ## Steps
 
-1. Open the web app; select the **Trainer** view from the left sidebar.
-2. Set the **trainer id** field (labelled "Acting as", in the sidebar) to `t-morgan`.
+1. Open the web app; select **Morgan Diaz** in the **"Acting as"** dropdown.
+2. Select the **Trainer** view from the left sidebar.
 3. Read the listed sessions: each shows class name, date, start–finish, roster, and count.
-4. Change the trainer id field to `nobody` (an unassigned id).
-5. Observe the view.
+4. Select **Alex Rivera (admin)** in the "Acting as" dropdown — the Trainer view stays open.
+5. In the **"Viewing trainer"** dropdown, choose **Lee Novak**; observe the view.
 
 ## Expect
 
@@ -30,13 +34,18 @@ unknown trainer id shows an empty state. Read-only: no data is changed.
   roster length. A seeded assigned session with no bookings appears with an **empty
   roster and count 0**. `GET /api/trainer/t-morgan/sessions` returns `200` with the
   matching sessions and rosters.
-- After step 5: the view shows a **"no sessions assigned"** empty state;
-  `GET /api/trainer/nobody/sessions` returns `200 []`. No error is shown; no data
-  changed anywhere.
+- After step 4: the menu gains **Admin**, the Trainer view remains selected, and a
+  **"Viewing trainer"** dropdown appears in the sidebar.
+- After step 5: the view lists Lee Novak's full Spin session with its three booked
+  members. No error is shown; no data changed anywhere.
 
 ---
 
 # TF-07 — Unknown / blank trainer yields empty, sessions unaffected
+
+_[Revised 2026-09-22] This scenario is now **API-only**. The UI no longer lets you
+name a trainer that does not exist, so the empty-state half is dropped; the
+endpoint's behaviour is unchanged and still worth checking directly._
 
 ## Goal
 
@@ -50,14 +59,13 @@ booking/scheduling behaviour untouched.
 
 ## Steps
 
-1. On the Trainer view, set the trainer id to an unassigned id and to blank in turn.
-2. Call `GET /api/trainer/ghost/sessions` directly.
-3. Confirm a session known to have no trainer does not appear for any trainer id.
-4. Verify the Timetable and Admin views behave exactly as before.
+1. Call `GET /api/trainer/ghost/sessions` directly.
+2. Confirm a session known to have no trainer does not appear for any trainer in
+   the "Viewing trainer" dropdown.
+3. Verify the Timetable and Admin views behave exactly as before.
 
 ## Expect
 
-- The Trainer view shows the empty state for both the unknown and the blank id.
 - The API returns `200 []` (never `404`) for an id that matches no session.
 - A `trainer = NULL` session appears in **no** trainer's list.
 - Booking, cancelling, capacity, and scheduling behave exactly as in the baseline

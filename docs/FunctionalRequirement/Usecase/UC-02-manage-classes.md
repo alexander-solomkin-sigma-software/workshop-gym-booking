@@ -6,17 +6,19 @@ _[Revised 2026-08-26] Scheduling a session now captures a finish time in additio
 
 _[Revised 2026-08-26] Sessions are **single-day**: the admin now picks a **date, a start time, and a finish time** (not two full date-times). Start and finish must be within working hours 06:00–22:00 (A5) and the duration must be 30 min–3 h (A6). Same-day is enforced structurally by the date+times form, and re-checked on the server._
 
+_[Revised 2026-09-22] The optional **trainer** is chosen from a dropdown of the known trainers (or left as "no trainer"), and each scheduled session shows the trainer assigned to it. Only a user with the admin role can open this view._
+
 ## Actor
 Admin.
 
 ## Preconditions
 - The app is running.
-- The user is acting as an admin.
+- The user is acting as an admin — selected in the sidebar's "Acting as" dropdown, which is what makes this view available. _[Revised 2026-09-22]_
 
 ## Main flow — create a class and schedule a session
 1. Admin opens the class management view.
 2. Admin creates a class (name, description).
-3. Admin schedules a single-day session for that class: a **date**, a **start time**, a **finish time**, and a capacity.
+3. Admin schedules a single-day session for that class: a **date**, a **start time**, a **finish time**, a capacity, and optionally a **trainer** picked from the known trainers. _[Revised 2026-09-22]_
 4. System composes the start and finish timestamps from the date + times and validates: same calendar day, finish strictly after start, both within working hours (06:00–22:00), and duration between 30 minutes and 3 hours — then saves the class and session.
 5. The new session appears on the member timetable with its start–finish time and full capacity available.
 
@@ -29,7 +31,7 @@ Admin.
 - **A6 — Duration outside allowed length:** if the session is shorter than 30 minutes or longer than 3 hours, the system rejects it with a clear message; nothing is saved. [Added 2026-08-26]
 
 ## Postconditions
-- The class/session list reflects the admin's changes.
+- The class/session list reflects the admin's changes, each session showing its capacity, current bookings, and **assigned trainer** (or "No trainer"). _[Revised 2026-09-22]_
 - Session capacities remain consistent with existing bookings.
 
 ## Rules referenced

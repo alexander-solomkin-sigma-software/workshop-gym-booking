@@ -8,6 +8,7 @@
 |---|---|---|
 | 2026-08-26 | Baseline layout design: left sidebar nav, distinct base surfaces, relabelled member field, labelled Manage-classes inputs | UX clarity pass on the shipped UI; builds on [ui-styling.md](ui-styling.md) / [ADR-0002](../ADR/0002-ui-styling-tailwind-daisyui.md) |
 | 2026-08-26 | Implemented in the web app (`App.tsx`, `AdminPage.tsx`); nav e2e added. | This design realised as-specified |
+| 2026-09-22 | §1 menu is now role-gated and §3's identity field is a user dropdown (accessible name `acting as`, superseding `member id`) | Superseded in part by [acting-as-roles.md](acting-as-roles.md) |
 
 ## Problem
 
@@ -39,6 +40,8 @@ component; the app becomes a two-column shell (sidebar + content).
 - **Structure** — a full-height left column holds, top to bottom:
   - the **app title** ("Gym Class Booking") at the top of the sidebar;
   - a vertical `menu` with one item per view: **Timetable** and **Admin**;
+    _[Revised 2026-09-22] the menu now lists only the pages the acting role may
+    use, and a **Trainer** item exists — see [acting-as-roles.md](acting-as-roles.md);_
   - the **member field** (see §3) below the menu, clearly separated.
 - **Content area** — the selected view (`TimetablePage` / `AdminPage`) fills the
   area to the right of the sidebar and is what changes when a menu item is chosen.
@@ -59,7 +62,7 @@ component; the app becomes a two-column shell (sidebar + content).
 │   Admin      │                             │
 │              │                             │
 │ Acting as    │                             │
-│ [ member id ]│                             │
+│ [ user   ▾ ] │                             │
 └──────────────┴─────────────────────────────┘
    base-200/300         base-100
 ```
@@ -102,6 +105,12 @@ text** that explains what it is, using daisyUI's `label` / `form-control` (or
   A visible "Acting as" caption is fine as long as the input's accessible name
   remains exactly `member id`.
 
+  _[Revised 2026-09-22] **This constraint is retired.** The field is now a
+  dropdown of demo users shared by every role, and its accessible name is
+  `acting as`; no control is named `member id` any more. The visible label and
+  the no-real-auth helper text are unchanged. See
+  [acting-as-roles.md](acting-as-roles.md)._
+
 ## 4. Labelled Manage-classes inputs
 
 Every input on the Admin ("Manage classes") page gets a **visible label** in
@@ -109,6 +118,9 @@ addition to its existing `aria-label`, so each field's purpose is obvious:
 
 - **Create-class form** — "Class name", "Description".
 - **Schedule form** — "Date", "Start time", "Finish time", "Capacity".
+  _[Revised 2026-09-22] also "Trainer (optional)", now a dropdown; each listed
+  session additionally shows its assigned trainer — see
+  [acting-as-roles.md](acting-as-roles.md) §4._
 - **Capacity editor** (inline per session) — keeps its `aria-label`; a visible
   "Capacity" label or a clear adjacent caption makes the inline control legible.
 
@@ -131,6 +143,10 @@ and rows TC-16–TC-18 in
 [booking-checklist.md](../../Testing/TestCases/booking-checklist.md). The existing
 `getByLabel('member id')` e2e must stay green — the member field's accessible name
 is unchanged.
+
+_[Revised 2026-09-22] The e2e now resolves the field as `getByLabel('acting as')`
+and selects a user; see [acting-as-roles.md](acting-as-roles.md) for the current
+accessible names._
 
 ## No ADR warranted
 

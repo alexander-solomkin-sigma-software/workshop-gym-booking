@@ -15,7 +15,10 @@ A small web app for a single gym to run **class bookings**. Members see the upco
 ## Users
 
 - **Member** — browses the timetable, books a place in a session, cancels their own booking.
-- **Admin** — creates and edits classes, schedules sessions, sets capacity.
+- **Admin** — creates and edits classes, schedules sessions, sets capacity, assigns trainers.
+- **Trainer** — reads the sessions they are assigned to and who is booked on each; changes nothing. _[Added 2026-09-22]_
+
+_[Added 2026-09-22] The demo switches between these users with an **"Acting as"** dropdown, and the acting user's role decides which pages the menu offers. This demonstrates roles; it is not authentication, and the API enforces no authorization._
 
 ## Goals
 

@@ -11,15 +11,16 @@
 | Date | Change | Rationale / source |
 |---|---|---|
 | 2026-08-26 | Trainer view shipped: assigned sessions + rosters | Implements UC-03 (extra-feature backlog: Trainer view) |
+| 2026-09-22 | Trainer is chosen in the "Acting as" dropdown; an admin picks whose roster to read; the unknown/blank id path is no longer reachable from the UI | [acting-as-roles.md](../../Architectural/Design/acting-as-roles.md) |
 
 ## Overview
 
 A **trainer** sees, before a session, **which sessions they are running** and
-**who is booked** on each. Acting as a trainer id (the "Acting as" field, exactly
-like the member field — a demo stand-in for sign-in, no real authentication), the
-trainer opens the **Trainer** view and reads their assigned sessions, each with
-its **roster** (the booked member ids) and **count**. This describes *behaviour*;
-the technical shape lives in the design.
+**who is booked** on each. Selecting themselves in the sidebar's **"Acting as"**
+dropdown — a demo stand-in for sign-in, no real authentication — the trainer
+opens the **Trainer** view and reads their assigned sessions, each with its
+**roster** (the booked member ids) and **count**. This describes *behaviour*;
+the technical shape lives in the design. _[Revised 2026-09-22]_
 
 Covers **UC-03** and the [extra-feature backlog](../extra-feature-backlog.md)
 (Trainer view, the first backlog item). Read-only — it changes no bookings,
@@ -35,15 +36,21 @@ sessions, or classes.
   always reflects current bookings and cannot drift (mirrors the derived
   `spotsLeft`).
 - **Assigned session with no bookings.** Still listed, with an **empty roster and
-  count 0** — it is shown because the trainer is assigned to it (UC-03 A3).
-- **Unknown / blank trainer id.** The view shows a **"no sessions assigned"** empty
-  state; `GET /api/trainer/:trainerId/sessions` returns `200 []`, never `404`
-  (UC-03 A1/A2).
+  count 0** — it is shown because the trainer is assigned to it (UC-03 A1).
+- **Who the view shows.** A trainer sees their own sessions. An **admin** may open
+  the view and chooses whose sessions to read in a "Viewing trainer" dropdown;
+  the page is identical and equally read-only. _[Added 2026-09-22]_
+- **Unknown / blank trainer id.** **Not reachable from the UI** since the trainer
+  is chosen from a dropdown of known trainers. The API still returns `200 []`,
+  never `404`, for an id matching no session, and the service tests keep covering
+  it. _[Revised 2026-09-22]_
 - **Sessions with no trainer (`NULL`).** Appear in **no** trainer's list.
-- **Optional trainer on scheduling.** The Admin schedule form gains an optional
-  **Trainer** field; when set, the session appears in that trainer's view, and when
-  blank the session is unassigned. All existing scheduling rules (single-day,
-  working hours, duration) are unchanged.
+- **Optional trainer on scheduling.** The Admin schedule form carries an optional
+  **Trainer** dropdown over the known trainers, with a leading `— no trainer —`
+  choice; when set, the session appears in that trainer's view, and when left
+  unset the session is unassigned. Each scheduled session displays its assigned
+  trainer (or "No trainer"). All existing scheduling rules (single-day, working
+  hours, duration) are unchanged. _[Revised 2026-09-22]_
 
 ## Rule ownership
 
@@ -75,8 +82,11 @@ run.
 - API (supertest): `GET /api/trainer/:id/sessions` shape for a seeded trainer,
   `200 []` for an unknown one, and scheduling with an optional trainer surfacing in
   the trainer view (`app.test.ts`).
-- E2e (Playwright): open the Trainer view, act as a seeded trainer → sessions and
-  rosters; act as an unknown trainer → empty state (`web/e2e/trainer.spec.ts`).
+- E2e (Playwright): act as a seeded trainer, open the Trainer view → sessions and
+  rosters; then act as the admin and pick another trainer → that trainer's roster
+  (`web/e2e/trainer.spec.ts`). _[Revised 2026-09-22 — the unknown-trainer path
+  left the e2e with the UI that reached it; it remains covered by
+  `trainer-service.test.ts` and `app.test.ts`.]_
 
 See the [booking checklist](../../Testing/TestCases/booking-checklist.md) (TC-19…24)
 and [TF-06 / TF-07](../../Testing/TestScenarios/TF-06-trainer-view.md).

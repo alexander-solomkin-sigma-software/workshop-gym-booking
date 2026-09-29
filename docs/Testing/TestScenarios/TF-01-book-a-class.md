@@ -10,12 +10,12 @@ free the place again — the end-to-end happy path exercised by the Playwright s
 ## Preconditions
 
 - App running via `npm run dev` with the seeded database.
-- Acting as member `zoe` (no seeded bookings, so the first row starts free).
+- Acting as member **Zoe Park** (`m2`) — no seeded bookings, so the first row starts free. _[Revised 2026-09-22]_
 
 ## Steps
 
 1. Open the web app; the **Timetable** view is shown (selected in the left sidebar).
-2. Set the **member id** field (labelled "Acting as", in the sidebar) to `zoe`.
+2. Select **Zoe Park** in the **"Acting as"** dropdown in the sidebar. _[Revised 2026-09-22]_
 3. In the first session row, click **Book**.
 4. Observe the row's action and spot count.
 5. Click **Cancel** in the same row.
