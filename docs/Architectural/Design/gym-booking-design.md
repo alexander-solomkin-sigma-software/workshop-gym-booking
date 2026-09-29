@@ -1,6 +1,6 @@
 # Design — Gym Class Booking (baseline)
 
-**Date:** 2026-08-21 (baseline) | **Last revised:** 2026-08-26
+**Date:** 2026-08-21 (baseline) | **Last revised:** 2026-09-22
 
 ## Revision History
 
@@ -9,6 +9,7 @@
 | 2026-08-21 | Baseline design | Derived from BRD/PDR/NFR + UC-01/UC-02 |
 | 2026-08-26 | Sessions gain a finish time (`ends_at`); schedule API validates `endsAt > startsAt`; timetable shows start–finish | Extend "Manage classes" (UC-02 A4 / PDR F4) |
 | 2026-08-26 | Sessions are single-day; schedule validates working hours (06:00–22:00) and duration (30 min–3 h) via named constants; schedule UI captures date + start time + finish time | Refine "Manage classes" (UC-02 A5/A6 / PDR F4) |
+| 2026-09-22 | Web routes: three role-gated views (Timetable, Admin, Trainer); the "Acting as" field is a dropdown of demo users; the schedule form's optional trainer is a dropdown and session rows show the assigned trainer | [acting-as-roles.md](acting-as-roles.md) |
 
 ## Problem
 
@@ -148,7 +149,7 @@ read-only **Trainer** page._
   composes `startsAt`/`endsAt` ISO timestamps from `date + startTime` and
   `date + finishTime` and posts them unchanged. The server still re-validates all
   rules — the UI holds no business logic.
-  [Revised 2026-09-22] The optional **trainer** is a dropdown of the known
+  _[Revised 2026-09-22]_ The optional **trainer** is a dropdown of the known
   trainers, and each listed session shows the trainer assigned to it.
 
 An **"Acting as" dropdown** of hardcoded demo users (in the sidebar) stands in for

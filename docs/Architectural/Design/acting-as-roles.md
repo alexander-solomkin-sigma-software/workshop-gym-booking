@@ -7,6 +7,7 @@
 | Date | Change | Rationale / source |
 |---|---|---|
 | 2026-09-22 | Acting-as becomes a dropdown of hardcoded demo users with roles; the sidebar menu shows only the acting role's pages; the Manage-classes trainer field becomes a dropdown and each session row shows its assigned trainer | Demo clarity pass on the shipped UI; builds on [ui-layout.md](ui-layout.md) and [ADR-0003](../ADR/0003-trainer-role-minimal-auth.md) |
+| 2026-09-22 | Review fixes: a role switch now also resets the picked page; the Timetable remounts per member and both pages ignore stale responses; "Viewing trainer" accessible name is `viewing trainer`; a Vitest drift guard ties `users.ts` to the seed | Code review of the acting-as increment |
 
 ## Problem
 
@@ -39,7 +40,9 @@ Manage classes, so the trainer you assign is always one you can act as.
 
 The ids are **not** arbitrary: the trainer ids must match the `trainer` values in
 `api/src/seed.ts`, or a trainer in this list sees nothing. Both files carry a
-comment pointing at the other.
+comment pointing at the other, and `api/src/demo-users.test.ts` imports the web
+list and fails if a demo trainer has no seeded sessions or the member ids stop
+matching (`m1` pre-booked, `m2` no bookings). _[Revised 2026-09-22]_
 
 ## 2. Role-gated navigation
 
@@ -53,10 +56,17 @@ comment pointing at the other.
 
 - The sidebar renders one menu item per **allowed** view, so a member simply has
   no Admin item — nothing is shown-but-disabled.
-- The effective view is **derived**, not stored: `allowed.includes(picked) ?
-  picked : allowed[0]`. Switching from Alex to Mia while Admin is open lands on
-  the Timetable rather than a page the new role may not see. No effect, no
-  synchronisation bug.
+- _[Revised 2026-09-22]_ Switching user to a role that cannot see the picked page
+  **resets the pick** to that role's first page, in the same change handler.
+  Switching from Alex to Mia while Admin is open lands on the Timetable, and
+  switching back to Alex stays on the Timetable instead of silently reopening
+  Admin. The render still derives `allowed.includes(picked) ? picked :
+  allowed[0]` as a defensive guard, so a page the role may not see is never shown.
+- _[Added 2026-09-22]_ The Timetable is **remounted per member** (`key={user.id}`),
+  so a switch starts empty rather than briefly showing the previous member's
+  bookings and Cancel buttons. Both the Timetable and Trainer pages also ignore
+  any response that is not the latest request, so a slow earlier load cannot
+  overwrite a newer one.
 
 **This is presentation only.** It hides pages; it does not protect them. The API
 performs no authorization — `/api/admin/*` remains unguarded and any id may be
@@ -69,7 +79,8 @@ A trainer acts as themselves: the acting user's id *is* the trainer id.
 
 An **admin** may open the Trainer view but is not a trainer, so a second sidebar
 control appears for them alone — a "Viewing trainer" dropdown over the same
-trainer list (accessible name `trainer id`), defaulting to the first trainer. It
+trainer list (accessible name `viewing trainer`, matching its visible label
+_[Revised 2026-09-22]_), defaulting to the first trainer. It
 renders only when an admin is on the Trainer view. `TrainerPage` is unchanged:
 it still takes one `trainerId` prop and does not know who chose it.
 
@@ -92,7 +103,7 @@ Tests resolve these controls by accessible name, and two names moved:
 | Control | Before | After |
 |---|---|---|
 | Acting-as identity | `member id` / `trainer id` (two inputs) | **`acting as`** (one select) |
-| Trainer being viewed | — | **`trainer id`** (admin only) |
+| Trainer being viewed | — | **`viewing trainer`** (admin only) _[Revised 2026-09-22]_ |
 | Trainer on schedule form | `trainer for new session of class N` | unchanged |
 
 The `member id` accessible name required by [ui-layout.md](ui-layout.md) §3 is
@@ -105,8 +116,11 @@ Covered by [TF-05](../../Testing/TestScenarios/TF-05-navigation-and-labels.md),
 TC-19, TC-23, TC-24, TC-25, TC-26 in
 [booking-checklist.md](../../Testing/TestCases/booking-checklist.md). The e2e
 specs select a user instead of typing an id; `nav.spec` additionally asserts that
-a member has no Admin or Trainer item and that the view falls back on a role
-change. The API suites are untouched — no API behaviour changed.
+a member has no Admin or Trainer item, that the view falls back on a role change,
+and that switching back does not reopen the hidden page. `smoke.spec` books as
+`m2` but picks the first row still offering Book, so a dev DB dirtied by manual
+testing does not break it. No API behaviour changed; the only API-side addition
+is the `demo-users.test.ts` drift guard. _[Revised 2026-09-22]_
 
 ## No ADR warranted
 

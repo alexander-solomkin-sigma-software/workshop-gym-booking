@@ -32,3 +32,9 @@ _[Revised 2026-09-22] The former A1 (unknown trainer) and A2 (blank trainer id) 
 - Rosters are **derived** from current bookings — the member ids booked on the session (see design; mirrors the derived `spotsLeft`).
 - Existing scheduling rules (single-day, working hours 06:00–22:00, duration 30 min–3 h) are unchanged by this feature (see UC-02).
 - No real authentication: picking a user stands in for sign-in, and the menu hides pages rather than protecting them (see [ADR-0003](../../Architectural/ADR/0003-trainer-role-minimal-auth.md) and [acting-as-roles.md](../../Architectural/Design/acting-as-roles.md)). _[Revised 2026-09-22]_
+
+## Open Items
+_[Added 2026-09-29]_ Deferred on purpose, not answered here. Each needs a product decision before it is built.
+- **Roster shows member ids, not names.** The web app now knows demo display names (`web/src/users.ts`), but the roster still lists raw ids (e.g. `m1`). Should trainers see names? That touches member privacy once real accounts exist.
+- **More than one trainer per session.** Currently one optional trainer. Co-taught classes are out of scope in the design; revisit if the gym asks for them.
+- **Real trainer sign-in.** "Acting as" is a demo stand-in (ADR-0003). Protecting the roster, which lists who attends which session, needs real authentication and API authorization. Tracked as a future ADR, not part of this increment.

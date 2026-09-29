@@ -1,6 +1,6 @@
 # Design — Trainer view (assigned sessions + rosters)
 
-**Date:** 2026-08-26 (baseline) | **Last revised:** 2026-08-26
+**Date:** 2026-08-26 (baseline) | **Last revised:** 2026-09-22
 
 ## Revision History
 
@@ -8,6 +8,7 @@
 |---|---|---|
 | 2026-08-26 | Baseline design for the Trainer view increment | Derived from the extra-feature backlog (Trainer view) + UC-03 |
 | 2026-08-26 | Implemented as designed (#5) — `sessions.trainer` column, `GET /api/trainer/:trainerId/sessions`, Trainer sidebar view + acting-as field, optional Admin trainer field | See [feature description](../../FunctionalRequirement/Feature/trainer-view.md) |
+| 2026-09-22 | Web routes: the free-text trainer id field is replaced by the shared "Acting as" user dropdown (plus an admin-only "Viewing trainer" dropdown); the Admin trainer input is a dropdown; the empty state is no longer reachable by typing. UC-03 alternate-flow citations updated to the renumbered A1/A2. API unchanged | [acting-as-roles.md](acting-as-roles.md); UC-03 revised 2026-09-22 |
 
 ## Problem
 
@@ -83,7 +84,8 @@ layering.
 `getTrainerSessions(trainerId)` returns the sessions whose `trainer` equals
 `trainerId`, ordered by `starts_at`, each enriched with its class name and roster.
 An unknown or empty trainer id yields an **empty list** (`200 []`), not a `404` —
-"no sessions" is a valid, expected answer (UC-03 A1/A2).
+"no sessions" is a valid, expected answer. Since the web UI offers only known
+trainers this is an API-level guarantee, covered by TC-22 / TF-07. _[Revised 2026-09-22]_
 
 Admin scheduling is extended, not replaced: `POST /api/admin/sessions` accepts an
 **optional** `trainer` field alongside the existing `{ classId, startsAt, endsAt,
@@ -113,7 +115,8 @@ working hours, duration) is unchanged and still runs.
 - `roster` is the list of booked member ids; `booked` is its length (a convenience
   count, mirroring the timetable's `booked`).
 - A session assigned to the trainer with no bookings appears with `roster: []`
-  and `booked: 0` (UC-03 A3) — it is still listed because the trainer is assigned.
+  and `booked: 0` (UC-03 A1) — it is still listed because the trainer is assigned.
+  _[Revised 2026-09-22]_
 
 ## Web routes
 
@@ -124,27 +127,32 @@ Admin (sidebar navigation defined in [ui-layout.md](ui-layout.md)):
   sessions. Each row shows the **class name**, **date**, **start–finish** time
   (e.g. `Tue Sep 1, 08:00–09:00`), the **roster** (the booked member ids), and the
   **count**. It is **read-only** — no Book/Cancel/schedule actions.
-- **Trainer "acting as" field** — a trainer id field, styled and captioned exactly
-  like the member field (visible "Acting as" label + helper text noting it is a
-  demo stand-in for sign-in, no real authentication). It stands in for auth so the
-  view can be demonstrated as different trainers. Which id field applies is the
-  active view's own (the Trainer view reads the trainer id; the Timetable reads the
-  member id) — see ADR-0003 for the "reuse the acting-as pattern" decision.
-- **Empty state** — when the trainer id matches no assigned sessions (or is blank),
-  the view shows a clear "no sessions assigned" message rather than an empty page
-  or an error (UC-03 A1/A2).
+- **Who is acting** — _[Revised 2026-09-22]_ one sidebar **"Acting as"** dropdown
+  of hardcoded demo users (members, trainers, an admin) replaces the former
+  free-text trainer id field; it is still a demo stand-in for sign-in, with no
+  real authentication (ADR-0003). The **Trainer** menu item appears only for the
+  trainer and admin roles. A trainer sees their own sessions (their user id *is*
+  the trainer id). An admin gets a second, admin-only **"Viewing trainer"**
+  dropdown to choose whose sessions to read (UC-03 A2). The user list, the role
+  gating, and both dropdowns are specified in [acting-as-roles.md](acting-as-roles.md).
+- **Empty state** — _[Revised 2026-09-22]_ if the API returns no sessions, the
+  view shows a "no sessions assigned" message rather than an empty table or an
+  error. With the dropdowns offering only seeded trainers it is no longer reached
+  by typing an unknown or blank id; it remains as a safe fallback.
 
-The Admin schedule form gains an **optional "Trainer" input** (a text field for a
-trainer id) next to the existing date / start / finish / capacity inputs; leaving
-it blank schedules a session with no trainer. The UI holds **no business logic** —
-it renders API results and posts the optional trainer id unchanged.
+_[Revised 2026-09-22]_ The Admin schedule form gains an **optional "Trainer"
+dropdown** over the known trainers, with a leading `— no trainer —` choice, next to
+the existing date / start / finish / capacity inputs; leaving it on `— no trainer —`
+schedules a session with no trainer. Each session row shows its assigned trainer
+(see [acting-as-roles.md](acting-as-roles.md) §4). The UI holds **no business
+logic** — it renders API results and posts the optional trainer id unchanged.
 
 ## Edge cases
 
 | Case | Handling |
 |---|---|
-| Unknown trainer id | `getTrainerSessions()` returns `[]` → `200 []`; UI shows "no sessions assigned". No `404`. |
-| Blank trainer id | Treated as "no match" → empty list / empty state; no session is attributed to a blank trainer. |
+| Unknown trainer id | `getTrainerSessions()` returns `[]` → `200 []`. No `404`. API-only: the UI offers only known trainers. _[Revised 2026-09-22]_ |
+| Blank trainer id | Treated as "no match" → `200 []`; no session is attributed to a blank trainer. API-only, as above. _[Revised 2026-09-22]_ |
 | Assigned session, no bookings | Listed with `roster: []` and `booked: 0` — shown because the trainer is assigned. |
 | Session with no trainer (`NULL`) | Never appears in any trainer's list; `NULL` matches no trainer id. |
 | Trainer id is also a member id | Independent namespaces; the trainer view keys only on `sessions.trainer`, the timetable only on `bookings.member_id`. No collision. |
@@ -160,8 +168,9 @@ it renders API results and posts the optional trainer id unchanged.
 - **Vitest + supertest** at the HTTP boundary: `GET /api/trainer/:trainerId/sessions`
   returns `200` with the expected shape for a seeded trainer and `200 []` for an
   unknown one; `POST /api/admin/sessions` accepts an optional `trainer`.
-- **Playwright** one e2e smoke: open the Trainer view, act as a seeded trainer, see
-  their sessions and rosters; act as an unknown trainer, see the empty state.
+- **Playwright** one e2e smoke: act as a seeded trainer, open the Trainer view, see
+  their sessions and rosters; then act as the admin and pick another trainer in
+  "Viewing trainer". _[Revised 2026-09-22]_
 
 See [test-strategy](../../Testing/Strategy/test-strategy.md) and
 [TF-06 — trainer view](../../Testing/TestScenarios/TF-06-trainer-view.md).

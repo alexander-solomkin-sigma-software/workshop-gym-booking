@@ -1,12 +1,13 @@
 # Business Requirements — Gym Class Booking
 
-**Date:** 2026-08-21 (baseline) | **Last revised:** 2026-08-21
+**Date:** 2026-08-21 (baseline) | **Last revised:** 2026-09-22
 
 ## Revision History
 
 | Date | Change | Rationale / source |
 |---|---|---|
 | 2026-08-21 | Baseline approved | Initial baseline scope |
+| 2026-09-22 | Users: Trainer role added and Admin assigns trainers; note that an "Acting as" dropdown switches demo users and the role gates the menu (not authentication) | Trainer view (UC-03) + [acting-as-roles.md](../../Architectural/Design/acting-as-roles.md) |
 
 ## Product
 
