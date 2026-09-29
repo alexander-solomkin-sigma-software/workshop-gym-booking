@@ -21,7 +21,7 @@ test('trainer view lists assigned sessions and rosters', async ({ page }) => {
   // An admin may see the Trainer view too, but is not a trainer: they pick
   // whose roster to read. The view stays on Trainer across the switch.
   await page.getByLabel('acting as').selectOption('a1');
-  await page.getByLabel('trainer id').selectOption('t-lee');
+  await page.getByLabel('viewing trainer').selectOption('t-lee');
 
   // Lee's full Spin session, with its three booked members.
   await expect(page.getByRole('cell', { name: 'Spin' }).first()).toBeVisible();

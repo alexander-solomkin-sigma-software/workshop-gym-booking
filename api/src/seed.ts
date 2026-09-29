@@ -9,7 +9,8 @@ import Database from 'better-sqlite3';
  *
  * The member and trainer ids here must match the demo users the web app offers
  * in its "Acting as" picker (`web/src/users.ts`): members `m1` (pre-booked) and
- * `m2` (no bookings), trainers `t-morgan` and `t-lee`.
+ * `m2` (no bookings), trainers `t-morgan` and `t-lee`. `demo-users.test.ts`
+ * fails if the two drift apart.
  */
 
 interface SeedClass {
@@ -32,7 +33,7 @@ const SEED: SeedClass[] = [
         capacity: 12,
         trainer: 't-morgan',
       },
-      // Assigned to t-morgan with no bookings → an empty roster (UC-03 A3).
+      // Assigned to t-morgan with no bookings → an empty roster (UC-03 A1).
       {
         startsAt: '2026-09-03T08:00:00.000Z',
         endsAt: '2026-09-03T09:00:00.000Z',

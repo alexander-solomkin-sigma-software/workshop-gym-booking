@@ -7,7 +7,8 @@ import { listRoster } from '../data/bookings-repo.js';
  * Trainer read rule: the sessions assigned to `trainerId`, ordered by start
  * time, each enriched with its class name and a roster derived from current
  * bookings. An unknown or blank trainer id yields an empty list (never an
- * error) — "no sessions" is a valid answer (UC-03 A1/A2). Read-only.
+ * error) — "no sessions" is a valid answer. The web UI only offers known
+ * trainers, so this is an API-level guarantee (TC-22 / TF-07). Read-only.
  */
 export function getTrainerSessions(db: Db, trainerId: string): TrainerSessionEntry[] {
   const id = (trainerId ?? '').trim();

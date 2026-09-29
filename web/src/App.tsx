@@ -12,8 +12,17 @@ export function App() {
 
   const user = USERS.find((u) => u.id === userId) ?? USERS[0];
   const allowed = VIEWS_BY_ROLE[user.role];
-  // Switching to a role that cannot see the picked page falls back to its first.
+  // Defensive: never render a page the acting role cannot see.
   const view = allowed.includes(picked) ? picked : allowed[0];
+
+  function actAs(nextId: string) {
+    const next = USERS.find((u) => u.id === nextId) ?? USERS[0];
+    const nextAllowed = VIEWS_BY_ROLE[next.role];
+    setUserId(next.id);
+    // Switching to a role that cannot see the picked page lands on its first
+    // page, and forgets the old pick so switching back does not reopen it.
+    if (!nextAllowed.includes(picked)) setPicked(nextAllowed[0]);
+  }
 
   // A trainer acts as themselves; an admin may read any trainer's roster.
   const isAdmin = user.role === 'admin';
@@ -47,7 +56,7 @@ export function App() {
               aria-label="acting as"
               className="select select-bordered select-sm w-full"
               value={userId}
-              onChange={(e) => setUserId(e.target.value)}
+              onChange={(e) => actAs(e.target.value)}
             >
               <optgroup label="Members">
                 {USERS.filter((u) => u.role === 'member').map((u) => (
@@ -85,7 +94,7 @@ export function App() {
                 <span className="label-text">Viewing trainer</span>
               </div>
               <select
-                aria-label="trainer id"
+                aria-label="viewing trainer"
                 className="select select-bordered select-sm w-full"
                 value={viewedTrainerId}
                 onChange={(e) => setViewedTrainerId(e.target.value)}
@@ -108,7 +117,9 @@ export function App() {
 
       <main className="flex-1 min-w-0 p-6 bg-base-100">
         <div className="max-w-4xl mx-auto">
-          {view === 'timetable' && <TimetablePage memberId={user.id} />}
+          {/* Keyed by member so a switch starts empty instead of briefly showing
+              the previous member's bookings (and their Cancel buttons). */}
+          {view === 'timetable' && <TimetablePage key={user.id} memberId={user.id} />}
           {view === 'admin' && <AdminPage />}
           {view === 'trainer' && <TrainerPage trainerId={trainerId} />}
         </div>

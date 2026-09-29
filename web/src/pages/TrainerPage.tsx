@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { getTrainerSessions } from '../api.js';
 import type { TrainerSessionEntry } from '../types.js';
 
@@ -25,15 +25,21 @@ function formatRange(startsAt: string, endsAt: string): string {
 }
 
 /**
- * Trainer view: read-only list of the acting trainer's assigned sessions, each
- * with its roster (booked member ids) and count. An unknown/blank trainer id
- * shows a "no sessions assigned" empty state (UC-03 A1/A2).
+ * Trainer view: read-only list of the given trainer's assigned sessions, each
+ * with its roster (booked member ids) and count (UC-03; an assigned session with
+ * no bookings is listed with an empty roster, UC-03 A1). The trainer is the
+ * acting trainer, or the one an admin picks (UC-03 A2). If the API returns no
+ * sessions, a "no sessions assigned" message is shown instead of the table.
  */
 export function TrainerPage({ trainerId }: { trainerId: string }) {
   const [entries, setEntries] = useState<TrainerSessionEntry[]>([]);
   const [error, setError] = useState<string | null>(null);
+  // Only the latest request may update the list: when an admin switches
+  // trainers quickly, a slow earlier response must not overwrite a newer one.
+  const latestRequest = useRef(0);
 
   const refresh = useCallback(async () => {
+    const request = ++latestRequest.current;
     setError(null);
     const id = trainerId.trim();
     if (!id) {
@@ -41,9 +47,10 @@ export function TrainerPage({ trainerId }: { trainerId: string }) {
       return;
     }
     try {
-      setEntries(await getTrainerSessions(id));
+      const data = await getTrainerSessions(id);
+      if (request === latestRequest.current) setEntries(data);
     } catch (e) {
-      setError((e as Error).message);
+      if (request === latestRequest.current) setError((e as Error).message);
     }
   }, [trainerId]);
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { book, cancel, getTimetable } from '../api.js';
 import type { TimetableEntry } from '../types.js';
 
@@ -29,13 +29,18 @@ export function TimetablePage({ memberId }: { memberId: string }) {
   const [entries, setEntries] = useState<TimetableEntry[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<number | null>(null);
+  // Only the latest request may update the table: a slow response from an
+  // earlier load must not overwrite a newer one.
+  const latestRequest = useRef(0);
 
   const refresh = useCallback(async () => {
+    const request = ++latestRequest.current;
     setError(null);
     try {
-      setEntries(await getTimetable(memberId));
+      const data = await getTimetable(memberId);
+      if (request === latestRequest.current) setEntries(data);
     } catch (e) {
-      setError((e as Error).message);
+      if (request === latestRequest.current) setError((e as Error).message);
     }
   }, [memberId]);
 

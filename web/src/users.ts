@@ -14,7 +14,8 @@ export interface DemoUser {
  * Picking one in the sidebar sets the id the API is called with.
  *
  * The trainer ids must match the `trainer` values in `api/src/seed.ts`,
- * otherwise a trainer here sees no sessions.
+ * otherwise a trainer here sees no sessions. `api/src/demo-users.test.ts`
+ * imports this list and fails if it drifts from the seed.
  */
 export const USERS: DemoUser[] = [
   { id: 'm1', name: 'Mia Chen', role: 'member' }, // has a seeded booking
