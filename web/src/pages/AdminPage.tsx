@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createClass, getClasses, scheduleSession, setCapacity } from '../api.js';
 import type { ClassWithSessions } from '../types.js';
+import { displayName, TRAINERS } from '../users.js';
 
 /** Admin view: create classes, schedule sessions, adjust capacity. */
 export function AdminPage() {
@@ -94,6 +95,9 @@ export function AdminPage() {
                       {new Date(s.startsAt).toLocaleString()}–
                       {new Date(s.endsAt).toLocaleTimeString()} — capacity {s.capacity} (booked{' '}
                       {s.booked})
+                    </span>
+                    <span className="badge badge-ghost badge-sm">
+                      {s.trainer ? displayName(s.trainer) : 'No trainer'}
                     </span>
                     <CapacityEditor
                       sessionId={s.id}
@@ -207,14 +211,19 @@ function ScheduleForm({
         <div className="label py-1">
           <span className="label-text">Trainer (optional)</span>
         </div>
-        <input
-          type="text"
-          className="input input-bordered input-sm w-32"
+        <select
+          className="select select-bordered select-sm w-40"
           aria-label={`trainer for new session of class ${classId}`}
-          placeholder="e.g. t-morgan"
           value={trainer}
           onChange={(e) => setTrainer(e.target.value)}
-        />
+        >
+          <option value="">— no trainer —</option>
+          {TRAINERS.map((t) => (
+            <option key={t.id} value={t.id}>
+              {t.name}
+            </option>
+          ))}
+        </select>
       </label>
       <button type="submit" className="btn btn-sm">
         Schedule

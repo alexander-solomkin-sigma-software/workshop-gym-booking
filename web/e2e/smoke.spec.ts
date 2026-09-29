@@ -4,13 +4,13 @@ import { expect, test } from '@playwright/test';
  * Happy-path smoke: a member browses the timetable, books a free class in a
  * specific row, sees the booking (Book -> Cancel), then cancels it and sees
  * the place open again (Cancel -> Book).
- * Runs as member `zoe` (not the pre-seeded `m1`) so the first row starts free.
+ * Runs as member `m2` (not the pre-seeded `m1`) so the first row starts free.
  */
 test('browse, book, then cancel a class', async ({ page }) => {
   await page.goto('/');
 
-  // Act as a fresh member with no seeded bookings.
-  await page.getByLabel('member id').fill('zoe');
+  // Act as a demo member with no seeded bookings.
+  await page.getByLabel('acting as').selectOption('m2');
 
   // Work within a single, stable row (ordered by start time, so it does not move).
   const firstRow = page.locator('tbody tr').first();

@@ -7,7 +7,9 @@ import Database from 'better-sqlite3';
  * Deterministic seed. Every checkout starts from identical data so tests,
  * demos, and screenshots line up. Re-running rebuilds the DB from scratch.
  *
- * Seeded member id used by the web app is `m1`.
+ * The member and trainer ids here must match the demo users the web app offers
+ * in its "Acting as" picker (`web/src/users.ts`): members `m1` (pre-booked) and
+ * `m2` (no bookings), trainers `t-morgan` and `t-lee`.
  */
 
 interface SeedClass {

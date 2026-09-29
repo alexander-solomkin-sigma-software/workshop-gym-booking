@@ -21,6 +21,8 @@ export interface SessionRow {
   endsAt: string;
   capacity: number;
   booked: number;
+  /** Assigned trainer id, or null when the session is unassigned. */
+  trainer: string | null;
 }
 
 export interface ClassWithSessions {
