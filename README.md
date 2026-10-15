@@ -4,6 +4,8 @@ A small, runnable web app for booking gym classes. Members browse a class **time
 
 It is deliberately simple and self-contained, and serves as the baseline for practising an **AI-assisted delivery workflow** — you extend it with a new feature and produce the documentation artifacts for that increment alongside the code.
 
+Upstream template: [github.com/alexander-solomkin-sigma-software/workshop-gym-booking](https://github.com/alexander-solomkin-sigma-software/workshop-gym-booking). Work items are on the [KAN board](https://vs5-ssw.atlassian.net/jira/software/projects/KAN/boards/34) in Jira; tool links are listed in [`docs/README.md`](docs/README.md#workshop-tools).
+
 ## Stack
 
 - **API** — Node/TypeScript, Express, SQLite (better-sqlite3) with a local DB file (no external database).

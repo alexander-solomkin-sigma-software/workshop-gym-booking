@@ -2,6 +2,16 @@
 
 Project documentation lives **in the repo, next to the code** — Git is the source of truth, and every doc renders directly on the default branch (Markdown + Mermaid). The one exception is the **Business layer** (BRD, PDR, NFR), which lives in **Confluence**; see [`Business/README.md`](Business/README.md) for the page links. The repo docs cite those pages by name.
 
+## Workshop tools
+
+| Tool | Link | Use it for |
+|---|---|---|
+| GitHub | [workshop-gym-booking](https://github.com/alexander-solomkin-sigma-software/workshop-gym-booking) | The upstream template repo: app code and every doc downstream of the Business layer. Your fork or copy is where you work. |
+| Confluence (site `vs5-ssw`) | [Site home](https://vs5-ssw.atlassian.net/wiki/home) · [Workshop space home](https://vs5-ssw.atlassian.net/wiki/spaces/~5a858650a0fcf74179510e1d/pages/1507329) | The Business layer (BRD, PDR, NFR); see [`Business/README.md`](Business/README.md) |
+| Jira | [Site home](https://vs5-ssw.atlassian.net/jira) · [KAN board](https://vs5-ssw.atlassian.net/jira/software/projects/KAN/boards/34) | Work items; their keys (for example `KAN-12`) go in commit messages |
+
+From Claude Code, read GitHub through the GitHub MCP connector and Confluence and Jira through the Atlassian MCP connector. In the browser you need access to the Atlassian site; your facilitator arranges it.
+
 ## Why the docs live here (persistent memory for AI)
 
 This project is built with an **AI-assisted delivery workflow**. An AI agent (and a human returning weeks later) loses context between sessions — it does not remember last week's decisions. **Structured documents act as persistent memory:** they carry the requirements, design rationale, and constraints across sessions, so when the agent reads a spec it understands not just *what* to build but *why* and *within what limits*. Without this, every session starts from zero and drifts.
@@ -62,7 +72,7 @@ They feed each other in a loop: **a tactical plan drives a code change → the c
 - **Execution plans / dated notes:** date-prefixed in `Implementation/Plans/` (`YYYY-MM-DD-topic.md`).
 - **Use cases:** `UC-NN-short-title.md`; **test scenarios:** `TF-NN-short-title.md`; **test checklists:** `<feature>-checklist.md`.
 - **No blank templates** — start a new artifact by **copying the closest existing filled document** and adapting it. The shipped baseline docs are your patterns.
-- **Commit convention:** `type(scope): reason #<issue>` (a GitHub issue number or work-item key).
+- **Commit convention:** `type(scope): reason #<issue>` (a GitHub issue number or a Jira key, for example `#KAN-12`).
 
 ## Revision History for evolving docs
 

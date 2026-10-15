@@ -35,7 +35,7 @@ Key rules:
 - **No blank templates** — start any new document by copying the closest existing filled one and adapting it.
 - **Living docs carry a Revision History** table; mark inline changes with `[Revised YYYY-MM-DD]`; the body always reflects current state.
 - **When you write a design, check whether it holds a decision worth an ADR** — if so, add one in `docs/Architectural/ADR/`.
-- **Commit convention:** `type(scope): reason #<issue>`.
+- **Commit convention:** `type(scope): reason #<issue>` (a GitHub issue number or a Jira key from the KAN board, for example `#KAN-12`; links in `docs/README.md`).
 
 ## Adding a feature (what you actually do here)
 

@@ -8,7 +8,7 @@ The **Business layer** (BRD, PDR, NFR) of this app is kept in **Confluence**, wh
 | **PDR** — Product Definition Requirements | Baseline feature list (F1–F4), core entities, rules | [PDR — Gym Class Booking](https://vs5-ssw.atlassian.net/wiki/spaces/~5a858650a0fcf74179510e1d/pages/1769473) |
 | **NFR** — Non-Functional Requirements | Runtime, persistence, setup, simplicity, security, UI styling | [NFR — Gym Class Booking](https://vs5-ssw.atlassian.net/wiki/spaces/~5a858650a0fcf74179510e1d/pages/1540098) |
 
-Parent page: [Business Requirements — Gym Class Booking](https://vs5-ssw.atlassian.net/wiki/spaces/~5a858650a0fcf74179510e1d/pages/1703937).
+Parent page: [Business Requirements — Gym Class Booking](https://vs5-ssw.atlassian.net/wiki/spaces/~5a858650a0fcf74179510e1d/pages/1703937), under the [workshop space home](https://vs5-ssw.atlassian.net/wiki/spaces/~5a858650a0fcf74179510e1d/pages/1507329) on the [`vs5-ssw` Confluence site](https://vs5-ssw.atlassian.net/wiki/home).
 
 ## How to read them
 
