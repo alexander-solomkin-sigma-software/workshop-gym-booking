@@ -1,6 +1,6 @@
 # Business layer — lives in Confluence
 
-The **Business layer** (BRD, PDR, NFR) of this app is kept in **Confluence**, which is its source of truth. It is **not** stored in this repo. Everything downstream (use cases, design, ADRs, plans, feature descriptions, tests) stays here in `docs/` and cites the Business pages by name, for example "PDR F4" or "per NFR".
+The **Business layer** (BRD, PDR, NFR) of this app is kept in **Confluence**, which is its source of truth. The repo holds only an [offline backup](#offline-fallback) for when Confluence can't be reached. Everything downstream (use cases, design, ADRs, plans, feature descriptions, tests) stays here in `docs/` and cites the Business pages by name, for example "PDR F4" or "per NFR".
 
 | Doc | Holds | Confluence page |
 |---|---|---|
@@ -14,8 +14,24 @@ Parent page: [Business Requirements — Gym Class Booking](https://vs5-ssw.atlas
 
 - **From Claude Code:** use the Atlassian MCP connector. Ask for the page by title or id, for example *"Read the Confluence page 1769473 (PDR — Gym Class Booking)"*.
 - **In the browser:** open the links above. You need read access to the Confluence space; your facilitator arranges it.
-- **Offline fallback:** your facilitator can hand out a PDF export of the three pages.
+- **Offline:** use the local backup below, or a PDF export of the three pages from your facilitator.
+
+## Offline fallback
+
+Use this only when Confluence is unavailable to you: no access to the space, or the Atlassian MCP connector is not connected or returns errors.
+
+| Doc | Local backup |
+|---|---|
+| **BRD** | [`offline/gym-booking-brd.md`](offline/gym-booking-brd.md) |
+| **PDR** | [`offline/gym-booking-pdr.md`](offline/gym-booking-pdr.md) |
+| **NFR** | [`offline/gym-booking-nfr.md`](offline/gym-booking-nfr.md) |
+
+- The copies are a **snapshot** of the pages (version 1, taken 2026-10-19). If both are available and they differ, Confluence wins.
+- Cite them the same way as the pages ("PDR F4", "per NFR"), so your downstream docs stay valid once Confluence is back.
+- From Claude Code, say so up front, for example *"Confluence is unavailable; read the Business layer from `docs/Business/offline/`"*.
 
 ## Changing them
 
 The pages are living docs with a Revision History table, the same convention as [`docs/README.md`](../README.md#revision-history-for-evolving-docs). A new feature that changes business scope gets a new Revision History row and an inline `[Revised YYYY-MM-DD]` marker on the page, not a rewrite.
+
+In offline mode, make the same edit (Revision History row + `[Revised YYYY-MM-DD]` marker) in the local backup copy, and apply it to the Confluence page once you have access again.

@@ -27,7 +27,7 @@ The docs in `docs/` are **persistent memory**: you (an AI agent) lose context be
 
 `docs/` is organised by artifact type and follows the delivery workflow: **Requirements → Design (+ ADR) → Execution plan → Feature description → Dev testing scenarios**. Read `docs/README.md` for the taxonomy, naming conventions, and the two-tier (tactical vs living) model.
 
-**Business requirements (BRD, PDR, NFR) live in Confluence, not in this repo.** Read them with the Atlassian MCP connector (page links in `docs/Business/README.md`). Downstream docs cite them by page and item, for example "PDR F4" or "per NFR"; never copy them back into `docs/`.
+**Business requirements (BRD, PDR, NFR) live in Confluence, not in this repo.** Read them with the Atlassian MCP connector (page links in `docs/Business/README.md`). Downstream docs cite them by page and item, for example "PDR F4" or "per NFR"; never copy them into other `docs/` files. **Offline fallback:** if the Atlassian connector is unavailable or returns errors, read (and, for a business-scope change, edit) the snapshot copies in `docs/Business/offline/` instead, and tell the user you did so; Confluence wins when both are available (see `docs/Business/README.md#offline-fallback`).
 
 Key rules:
 - **One topic per document**; keep files small.
